@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class DrawMap : MonoBehaviour
 {
+    public enum DrawMode
+    {
+        NoiseMap,
+        ColourMap,
+        Mesh
+    }
+    public DrawMode drawMode;
 
     public int width;
     public int height;
@@ -17,14 +24,50 @@ public class DrawMap : MonoBehaviour
     public int seed;            //affects sample points chosen
     public Vector2 offset;
 
+    public float heightMulti;
+    public AnimationCurve heightCurve;
+
     public bool autoUpdate;
+
+    public Terrain[] regions;
 
     public void Draw()
     {
         float[,] map = MapNoise.CreateNoise(width, height, seed, scale, octaves, persistence, lacunarity, offset);
 
+        Color[] colours = new Color[width*height];
+
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                float currHeight = map[x, y];
+                for (int i = 0; i < height; i++)
+                {
+                    if (currHeight <= regions[i].height)
+                    {
+                        colours[y*width+x] = regions[i].colour;
+                        break;
+                    }
+                }
+            }
+        }
+
+
         DisplayMap display = FindObjectOfType<DisplayMap>();
-        display.DrawNoise(map);
+
+        if (drawMode == DrawMode.NoiseMap)
+        {
+            display.DrawTexture(TextureGen.NoiseTexture(map));
+        }
+        else if (drawMode == DrawMode.ColourMap)
+        {
+            display.DrawTexture(TextureGen.ColourTexture(colours, width, height));
+        }
+        else if (drawMode == DrawMode.Mesh)
+        {
+            display.DrawMesh(MeshGen.GenTerrain(map, heightMulti, heightCurve), TextureGen.ColourTexture(colours, width, height));
+        }
     }
 
     private void OnValidate()
@@ -46,6 +89,14 @@ public class DrawMap : MonoBehaviour
             octaves = 0;
         }
 
+    }
+
+    [System.Serializable]
+    public struct Terrain
+    {
+        public string name;
+        public float height;
+        public Color colour;
     }
 
 }
