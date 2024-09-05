@@ -10,8 +10,8 @@ public static class MeshGen
         int width = heightMap.GetLength(0);
         int height = heightMap.GetLength(1);
 
-        float topLeftX = (width - 1) / 2;
-        float topLeftZ = (height - 1) / 2;
+        float topLeftX = (width - 1) / 2f;
+        float topLeftZ = (height - 1) / 2f;
 
         MapMesh mapMesh = new MapMesh(width, height);
 
@@ -21,7 +21,7 @@ public static class MeshGen
         {
             for (int x = 0; x < width; x++)
             {
-                mapMesh.verts[vertIndex] = new Vector3(topLeftX + x, heightCurve.Evaluate(heightMap[x,y]) * heightMulti, topLeftZ - y);
+                mapMesh.verts[vertIndex] = new Vector3(topLeftX - x, heightCurve.Evaluate(heightMap[x,y]) * heightMulti, topLeftZ - y);
                 mapMesh.uvs[vertIndex] = new Vector2((float)x/width, (float)y/height);
 
                 if(x < width - 1 && y < height -1) // draw triangles
@@ -58,12 +58,14 @@ public class MapMesh
 
     public void AddTri(int a, int b, int c)
     {
-        tris[triIndex] = a;
+        tris[triIndex] = c;
         tris[triIndex + 1] = b;
-        tris[triIndex + 2] = c;
+        tris[triIndex + 2] = a;
 
         triIndex += 3;
     }
+
+
 
     public Mesh GenerateMesh()
     {

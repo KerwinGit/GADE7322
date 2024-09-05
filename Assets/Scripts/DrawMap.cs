@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class DrawMap : MonoBehaviour
 {
@@ -10,7 +11,8 @@ public class DrawMap : MonoBehaviour
         NoiseMap,
         ColourMap,
         Mesh,
-        Falloff
+        Falloff,
+        Paths
     }
     public DrawMode drawMode;
 
@@ -40,10 +42,43 @@ public class DrawMap : MonoBehaviour
     public bool useFalloff;
     float[,] falloff;
 
+    public LineRenderer[] lineRenderers; // LineRenderers to flatten along
+    float[,] paths;
+    public float pathSmoothStart;
+    public float pathSmoothEnd;
+
+    public LineRendererSetup lineRenderersSetup;
+
     private void Awake()
     {
         mapSize = new Vector2Int(width, height);
-        falloff = CentreValley.Generate(mapSize,smoothStart,smoothEnd);
+
+        falloff = CentreValley.Generate(mapSize, smoothStart, smoothEnd);
+
+        paths = PathGen.Generate(mapSize, lineRenderers, pathSmoothStart, pathSmoothEnd);
+
+        if (width < 1)
+        {
+            width = 1;
+        }
+        if (height < 1)
+        {
+            height = 1;
+        }
+        if (lacunarity < 1)
+        {
+            lacunarity = 1;
+        }
+        if (octaves < 0)
+        {
+            octaves = 0;
+        }
+
+        seed =  System.DateTime.Now.Ticks.GetHashCode();
+
+        lineRenderersSetup.SetupRandomAngledLineRenderers();
+
+        Draw();
     }
 
     public void Draw()
@@ -60,6 +95,9 @@ public class DrawMap : MonoBehaviour
                 {
                     map[x,y] = Mathf.Clamp01(map[x,y] - falloff[x,y]);
                 }
+
+                map[x, y] = Mathf.Clamp01(map[x, y] - paths[x, y]);
+
                 float currHeight = map[x, y];
                 for (int i = 0; i < height; i++)
                 {
@@ -91,13 +129,19 @@ public class DrawMap : MonoBehaviour
         {
             display.DrawTexture(TextureGen.NoiseTexture(CentreValley.Generate(mapSize, smoothStart, smoothEnd)));
         }
-    }
+        else if(drawMode == DrawMode.Paths)
+        {
+            display.DrawTexture(TextureGen.NoiseTexture(PathGen.Generate(mapSize, lineRenderers, smoothStart, smoothEnd)));
+        }
+    }    
 
     private void OnValidate()
     {
         mapSize = new Vector2Int(width, height);
 
         falloff = CentreValley.Generate(mapSize, smoothStart, smoothEnd);
+
+        paths = PathGen.Generate(mapSize, lineRenderers, pathSmoothStart, pathSmoothEnd);
 
         if (width < 1)
         {
@@ -116,6 +160,9 @@ public class DrawMap : MonoBehaviour
             octaves = 0;
         }
 
+        lineRenderersSetup.SetupRandomAngledLineRenderers();
+
+        Draw();
     }
 
     [System.Serializable]
