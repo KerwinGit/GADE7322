@@ -158,8 +158,8 @@ MonoBehaviour:
   mesh: {fileID: 0}
   verticesArr: []
   triangleArr: 
-  xSize: 50
-  zSize: 50
+  xSize: 100
+  zSize: 100
   gradient:
     serializedVersion: 2
     key0: {r: 0.6320754, g: 0.42324594, b: 0.22957455, a: 1}
@@ -171,7 +171,7 @@ MonoBehaviour:
     key6: {r: 0, g: 0, b: 0, a: 0}
     key7: {r: 0, g: 0, b: 0, a: 0}
     ctime0: 0
-    ctime1: 193
+    ctime1: 3662
     ctime2: 0
     ctime3: 0
     ctime4: 0
@@ -193,6 +193,10 @@ MonoBehaviour:
   noiseScale: 0.3
   heightMultiplier: 2
   seed: 0
+  lineRenderers:
+  - {fileID: 1942573822}
+  - {fileID: 1490924541}
+  - {fileID: 1224122853}
   flattenRadius: 3
 --- !u!23 &102798176
 MeshRenderer:
@@ -281,7 +285,7 @@ MonoBehaviour:
   colors: []
   frequency: 4.19
   amplitude: 3.99
-  minAngle: 50
+  minAngle: 75
 --- !u!1 &723808798
 GameObject:
   m_ObjectHideFlags: 0
@@ -460,16 +464,16 @@ LineRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Positions:
-  - {x: 50, y: 0, z: 50}
-  - {x: 57.26465, y: 0, z: 58.19817}
-  - {x: 57.07266, y: 0, z: 66.39634}
-  - {x: 55.778744, y: 0, z: 74.59451}
-  - {x: 60.72289, y: 0, z: 82.79268}
-  - {x: 68.69861, y: 0, z: 90.99085}
-  - {x: 71.31712, y: 0, z: 99.189026}
-  - {x: 69.89142, y: 0, z: 107.38719}
-  - {x: 71.09161, y: 0, z: 115.585365}
-  - {x: 78.370636, y: 0, z: 123.78353}
+  - {x: 25, y: 0, z: 25}
+  - {x: 25.43257, y: 0, z: 16.891417}
+  - {x: 19.125628, y: 0, z: 8.782833}
+  - {x: 10.808725, y: 0, z: 0.6742496}
+  - {x: 10.04994, y: 0, z: -7.4343333}
+  - {x: 11.764865, y: 0, z: -15.542918}
+  - {x: 6.9275513, y: 0, z: -23.6515}
+  - {x: -2.5159807, y: 0, z: -31.760084}
+  - {x: -4.310719, y: 0, z: -39.868668}
+  - {x: -5.384573, y: 0, z: -47.97725}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 207.51543
@@ -478,7 +482,7 @@ LineRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.0017865865
+        value: 0.00048189188
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -487,7 +491,7 @@ LineRenderer:
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 1
-        value: 0.0017865865
+        value: 0.00048189188
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -613,16 +617,16 @@ LineRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Positions:
-  - {x: 50, y: 0, z: 50}
-  - {x: 60.162712, y: 0, z: 43.571507}
-  - {x: 62.77663, y: 0, z: 37.143017}
-  - {x: 63.64785, y: 0, z: 30.714523}
-  - {x: 72.326744, y: 0, z: 24.286032}
-  - {x: 82.41484, y: 0, z: 17.85754}
-  - {x: 88.30285, y: 0, z: 11.429048}
-  - {x: 89.096664, y: 0, z: 5.0005565}
-  - {x: 95.83563, y: 0, z: -1.4279348}
-  - {x: 103.865906, y: 0, z: -7.8564262}
+  - {x: 25, y: 0, z: 25}
+  - {x: 20.603918, y: 0, z: 28.022943}
+  - {x: 9.40131, y: 0, z: 31.045889}
+  - {x: -3.6610286, y: 0, z: 34.068832}
+  - {x: -9.371175, y: 0, z: 37.091778}
+  - {x: -12.794687, y: 0, z: 40.114723}
+  - {x: -21.831083, y: 0, z: 43.137665}
+  - {x: -35.331337, y: 0, z: 46.16061}
+  - {x: -42.96621, y: 0, z: 49.18355}
+  - {x: -49.220673, y: 0, z: 52.206497}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 207.51543
@@ -631,7 +635,7 @@ LineRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.0017865865
+        value: 0.00048189188
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -640,7 +644,7 @@ LineRenderer:
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 1
-        value: 0.0017865865
+        value: 0.00048189188
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -903,16 +907,16 @@ LineRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Positions:
-  - {x: 50, y: 0, z: 50}
-  - {x: 47.134014, y: 0, z: 55.6461}
-  - {x: 37.366467, y: 0, z: 61.2922}
-  - {x: 26.068552, y: 0, z: 66.93829}
-  - {x: 21.294468, y: 0, z: 72.5844}
-  - {x: 20.557375, y: 0, z: 78.23049}
-  - {x: 12.411435, y: 0, z: 83.876595}
-  - {x: -1.095293, y: 0, z: 89.52269}
-  - {x: -5.8063483, y: 0, z: 95.16879}
-  - {x: -10.553684, y: 0, z: 100.81489}
+  - {x: 25, y: 0, z: 25}
+  - {x: 32.796616, y: 0, z: 32.895813}
+  - {x: 33.623493, y: 0, z: 40.791626}
+  - {x: 32.71699, y: 0, z: 48.687443}
+  - {x: 38.842865, y: 0, z: 56.583256}
+  - {x: 48.37987, y: 0, z: 64.47907}
+  - {x: 50.117725, y: 0, z: 72.374886}
+  - {x: 48.651672, y: 0, z: 80.2707}
+  - {x: 51.69364, y: 0, z: 88.16651}
+  - {x: 59.62727, y: 0, z: 96.062325}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 207.51543
@@ -921,7 +925,7 @@ LineRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.0017865865
+        value: 0.00048189188
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -930,7 +934,7 @@ LineRenderer:
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 1
-        value: 0.0017865865
+        value: 0.00048189188
         inSlope: 0
         outSlope: 0
         tangentMode: 0

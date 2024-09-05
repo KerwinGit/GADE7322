@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+
 public class LineRendererSetup : MonoBehaviour
 {
     [SerializeField] private LineRenderer[] lineRenderers; // Assign three LineRenderers in the inspector
@@ -11,15 +12,7 @@ public class LineRendererSetup : MonoBehaviour
     [SerializeField] private float amplitude = 1f; // Amplitude of the sine wave
     [SerializeField] private float minAngle = 15f; // Minimum angle between lines
 
-    private void OnValidate()
-    {
-        if (lineRenderers != null && lineRenderers.Length == 3)
-        {
-            SetupRandomAngledLineRenderers();
-        }
-    }
-
-    private void Start()
+    private void Awake()
     {
         if (lineRenderers == null || lineRenderers.Length != 3)
         {
@@ -28,6 +21,10 @@ public class LineRendererSetup : MonoBehaviour
         }
 
         SetupRandomAngledLineRenderers();
+    }
+    private void Start()
+    {
+        
     }
 
     private void SetupRandomAngledLineRenderers()
