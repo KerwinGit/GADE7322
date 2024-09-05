@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 
 public class DrawMap : MonoBehaviour
@@ -8,7 +9,8 @@ public class DrawMap : MonoBehaviour
     {
         NoiseMap,
         ColourMap,
-        Mesh
+        Mesh,
+        Falloff
     }
     public DrawMode drawMode;
 
@@ -31,6 +33,19 @@ public class DrawMap : MonoBehaviour
 
     public Terrain[] regions;
 
+    public float smoothStart;
+    public float smoothEnd;
+    public Vector2Int mapSize;
+
+    public bool useFalloff;
+    float[,] falloff;
+
+    private void Awake()
+    {
+        mapSize = new Vector2Int(width, height);
+        falloff = CentreValley.Generate(mapSize,smoothStart,smoothEnd);
+    }
+
     public void Draw()
     {
         float[,] map = MapNoise.CreateNoise(width, height, seed, scale, octaves, persistence, lacunarity, offset);
@@ -41,6 +56,10 @@ public class DrawMap : MonoBehaviour
         {
             for (int x = 0; x < width; x++)
             {
+                if(useFalloff)
+                {
+                    map[x,y] = Mathf.Clamp01(map[x,y] - falloff[x,y]);
+                }
                 float currHeight = map[x, y];
                 for (int i = 0; i < height; i++)
                 {
@@ -68,11 +87,19 @@ public class DrawMap : MonoBehaviour
         {
             display.DrawMesh(MeshGen.GenTerrain(map, heightMulti, heightCurve), TextureGen.ColourTexture(colours, width, height));
         }
+        else if(drawMode == DrawMode.Falloff)
+        {
+            display.DrawTexture(TextureGen.NoiseTexture(CentreValley.Generate(mapSize, smoothStart, smoothEnd)));
+        }
     }
 
     private void OnValidate()
     {
-        if(width < 1)
+        mapSize = new Vector2Int(width, height);
+
+        falloff = CentreValley.Generate(mapSize, smoothStart, smoothEnd);
+
+        if (width < 1)
         {
             width = 1;
         }
