@@ -2,12 +2,11 @@ using UnityEngine;
 
 public class PlacementManager : MonoBehaviour
 {
-
     [SerializeField] private GameObject defenderPrefab;
     [SerializeField] private Color placeableColour;
     [SerializeField] private bool clicked;
     [SerializeField] private LayerMask terrainLayer;
-    // Start is called before the first frame update
+    [SerializeField] private float placementRadius = 0.2f; // Minimum distance between defenders
 
     private void Update()
     {
@@ -16,25 +15,45 @@ public class PlacementManager : MonoBehaviour
             SpawnDefenderOnCursor();
         }
     }
+
     public void SpawnDefenderOnCursor()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, terrainLayer))
         {
-            if (hit.point.y < 40 && hit.point.y >0.4f)
+            if (hit.point.y < 40 && hit.point.y > 0.4f)
             {
-                Instantiate(defenderPrefab, hit.point, Quaternion.identity);
+                // Check for nearby defenders
+                if (!IsTooCloseToAnotherDefender(hit.point))
+                {
+                    Instantiate(defenderPrefab, hit.point, Quaternion.identity);
+                }
+                else
+                {
+                    Debug.Log("Too close to another defender.");
+                }
             }
             else
             {
-                Debug.Log("Can't Y is " + hit.point.y);
+                Debug.Log("Can't place, Y is " + hit.point.y);
             }
-
         }
-
     }
 
-
+    private bool IsTooCloseToAnotherDefender(Vector3 spawnPoint)
+    {
+        // Find all objects tagged as "defender"
+        GameObject[] defenders = GameObject.FindGameObjectsWithTag("Defender");
+        foreach (GameObject defender in defenders)
+        {
+            // Check distance between the spawn point and each defender
+            if (Vector3.Distance(spawnPoint, defender.transform.position) < placementRadius)
+            {
+                return true; // Defender is too close
+            }
+        }
+        return false; // No defenders are too close
+    }
 }
 

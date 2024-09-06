@@ -456,6 +456,7 @@ MonoBehaviour:
   terrainLayer:
     serializedVersion: 2
     m_Bits: 8
+  placementRadius: 20
 --- !u!1 &422037575
 GameObject:
   m_ObjectHideFlags: 0
@@ -1397,7 +1398,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d72463dc8976a9249b43416d67851169, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  renderer: {fileID: 2060175946}
+  mapRenderer: {fileID: 0}
   meshFilter: {fileID: 1058386380}
   meshRenderer: {fileID: 1058386379}
 --- !u!114 &1000510514
@@ -1488,6 +1489,10 @@ MonoBehaviour:
   smoothEnd: 0.29
   mapSize: {x: 150, y: 150}
   useFalloff: 1
+  lineRenderers: []
+  pathSmoothStart: 0
+  pathSmoothEnd: 0
+  lineRenderersSetup: {fileID: 0}
 --- !u!4 &1000510515
 Transform:
   m_ObjectHideFlags: 0
