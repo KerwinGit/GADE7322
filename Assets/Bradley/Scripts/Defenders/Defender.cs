@@ -3,9 +3,14 @@ using UnityEngine;
 public class Defender : MonoBehaviour
 {
     [SerializeField] private int health = 100;
-    // Start is called before the first frame update
 
-
+    private void Update()
+    {
+        if(health <=0)
+        {
+            Destroy(this.gameObject);
+        }
+    }
 
     public void TakeDamage(int damage)
     {
