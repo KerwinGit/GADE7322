@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CentreValley
-{
-    
+{    
     public static float[,] Generate(Vector2Int size, float smoothStart, float smoothEnd)
     {
         float[,] heightMap = new float[size.x, size.y];

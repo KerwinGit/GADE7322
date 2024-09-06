@@ -10,8 +10,8 @@ public static class MeshGen
         int width = heightMap.GetLength(0);
         int height = heightMap.GetLength(1);
 
-        float topLeftX = (width - 1) / 2;
-        float topLeftZ = (height - 1) / 2;
+        float topLeftX = (width - 1) / 2f;
+        float topLeftZ = (height - 1) / 2f;
 
         MapMesh mapMesh = new MapMesh(width, height);
 
@@ -64,6 +64,8 @@ public class MapMesh
 
         triIndex += 3;
     }
+
+
 
     public Mesh GenerateMesh()
     {

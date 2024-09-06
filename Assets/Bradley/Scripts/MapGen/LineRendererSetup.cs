@@ -12,7 +12,7 @@ public class LineRendererSetup : MonoBehaviour
     [SerializeField] private float amplitude = 1f; // Amplitude of the sine wave
     [SerializeField] private float minAngle = 15f; // Minimum angle between lines
 
-    private void Awake()
+    private void OnValidate()
     {
         if (lineRenderers == null || lineRenderers.Length != 3)
         {
@@ -22,12 +22,8 @@ public class LineRendererSetup : MonoBehaviour
 
         SetupRandomAngledLineRenderers();
     }
-    private void Start()
-    {
-        
-    }
 
-    private void SetupRandomAngledLineRenderers()
+    public void SetupRandomAngledLineRenderers()
     {
         if (lineRenderers.Length != 3) return;
 
@@ -44,8 +40,8 @@ public class LineRendererSetup : MonoBehaviour
                 lr.endColor = colors[i];
             }
 
-            lr.startWidth = 0.1f;
-            lr.endWidth = 0.1f;
+            lr.startWidth = 2f;
+            lr.endWidth = 2f;
             lr.positionCount = 10; // Number of points to create a smooth curve
 
             // Calculate end position based on the angle
