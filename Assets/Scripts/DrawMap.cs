@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Unity.AI.Navigation;
 
 public class DrawMap : MonoBehaviour
 {
@@ -83,6 +84,7 @@ public class DrawMap : MonoBehaviour
         Draw();
 
         meshGO.AddComponent<MeshCollider>();
+        meshGO.GetComponent<NavMeshSurface>().BuildNavMesh();
     }
 
     public void Draw()
