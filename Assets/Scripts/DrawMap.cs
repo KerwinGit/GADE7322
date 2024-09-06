@@ -49,6 +49,8 @@ public class DrawMap : MonoBehaviour
 
     public LineRendererSetup lineRenderersSetup;
 
+    public GameObject meshGO;
+
     private void Awake()
     {
         mapSize = new Vector2Int(width, height);
@@ -79,6 +81,8 @@ public class DrawMap : MonoBehaviour
         lineRenderersSetup.SetupRandomAngledLineRenderers();
 
         Draw();
+
+        meshGO.AddComponent<MeshCollider>();
     }
 
     public void Draw()
