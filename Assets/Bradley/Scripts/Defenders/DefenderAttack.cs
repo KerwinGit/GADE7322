@@ -154,7 +154,7 @@ public class DefenderAttack : MonoBehaviour
     private void VisualizeAttack(Enemy target)
     {
         // Set the positions for the LineRenderer
-        lineRenderer.SetPosition(0, transform.position); // Start at the tower
+        lineRenderer.SetPosition(0, new Vector3(transform.position.x, lineRenderer.GetPosition(0).y, transform.position.z)); // Start at the tower
         lineRenderer.SetPosition(1, target.transform.position);    // End at the enemy
 
         // Show the line
