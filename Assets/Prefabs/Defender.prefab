@@ -260,5 +260,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   atkDelay: 1
-  atkDamage: 0
+  atkDamage: 15
   lineRenderer: {fileID: 958810382628330689}
