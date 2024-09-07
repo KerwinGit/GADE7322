@@ -11,6 +11,7 @@ public class LineRendererSetup : MonoBehaviour
     [SerializeField] private float frequency = 1f; // Frequency of the sine wave
     [SerializeField] private float amplitude = 1f; // Amplitude of the sine wave
     [SerializeField] private float minAngle = 15f; // Minimum angle between lines
+    [SerializeField] private MeshGenerator meshgen;
 
     private void OnValidate()
     {
@@ -21,6 +22,7 @@ public class LineRendererSetup : MonoBehaviour
         }
 
         SetupRandomAngledLineRenderers();
+        meshgen.GenerateTerrain();
     }
 
     public void SetupRandomAngledLineRenderers()

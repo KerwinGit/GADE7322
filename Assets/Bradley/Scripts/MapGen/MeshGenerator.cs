@@ -26,21 +26,22 @@ public class MeshGenerator : MonoBehaviour
 
     private void Start()
     {
-        mesh = new Mesh();
-        GetComponent<MeshFilter>().mesh = mesh;
-        seed = Random.Range(0, 10000); // Randomize the seed at start
-        GenerateTerrain();
+
     }
 
     private void OnValidate()
     {
+        mesh = new Mesh();
+        GetComponent<MeshFilter>().mesh = mesh;
+        seed = Random.Range(0, 10000); // Randomize the seed at start
+        GenerateTerrain();
         if (mesh != null)
         {
             GenerateTerrain();
         }
     }
 
-    private void GenerateTerrain()
+    public void GenerateTerrain()
     {
         CreateShape();
         UpdateMesh();
