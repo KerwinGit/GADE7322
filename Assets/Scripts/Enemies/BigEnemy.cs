@@ -1,11 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.AI;
 using static UnityEngine.GraphicsBuffer;
 
-public class BasicEnemy : Enemy
+public class BigEnemy : Enemy
 {
     [SerializeField] private LineRenderer lineRenderer; // Reference to LineRenderer
     private bool isAttacking = false;
@@ -21,11 +20,11 @@ public class BasicEnemy : Enemy
 
         lineRenderer = GetComponent<LineRenderer>();
 
-        health = 50;
-        atkDamage = 10;
-        atkDelay = 1;
-        agent.speed = 35;
-        agent.stoppingDistance = 50;
+        health = 100;
+        atkDamage = 50;
+        atkDelay = 3;
+        agent.speed = 20;
+        agent.stoppingDistance = 75;                 
     }
 
     void Update()
@@ -35,7 +34,7 @@ public class BasicEnemy : Enemy
             Destroy(this.gameObject);
         }
 
-        if (Vector3.Distance(this.transform.position, target.transform.position) < 100)
+        if (Vector3.Distance(this.transform.position, target.transform.position) < 125)
         {
             if (!isAttacking && target != null)
             {
@@ -99,7 +98,7 @@ public class BasicEnemy : Enemy
     {
         // Set the positions for the LineRenderer
         lineRenderer.SetPosition(0, new Vector3(transform.position.x, lineRenderer.GetPosition(0).y, transform.position.z)); // Start at the enemy
-        lineRenderer.SetPosition(1, new Vector3(target.transform.position.x, target.transform.position.y+30, target.transform.position.z));    // End at the tower
+        lineRenderer.SetPosition(1, new Vector3(target.transform.position.x, target.transform.position.y + 30, target.transform.position.z));    // End at the tower
 
         // Show the line
         lineRenderer.enabled = true;

@@ -8,7 +8,7 @@ public abstract class Enemy : MonoBehaviour
     [SerializeField] protected GameManager gameManager;
     [SerializeField] protected float atkDelay;
     [SerializeField] protected int atkDamage;
-    [SerializeField] protected int health = 100;
+    [SerializeField] protected int health;
 
     protected NavMeshAgent agent;
 

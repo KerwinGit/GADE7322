@@ -1,11 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.PackageManager;
 using UnityEngine;
-using UnityEngine.AI;
 using static UnityEngine.GraphicsBuffer;
+using UnityEngine.AI;
 
-public class BasicEnemy : Enemy
+public class BomberEnemy : Enemy
 {
     [SerializeField] private LineRenderer lineRenderer; // Reference to LineRenderer
     private bool isAttacking = false;
@@ -21,21 +20,24 @@ public class BasicEnemy : Enemy
 
         lineRenderer = GetComponent<LineRenderer>();
 
-        health = 50;
-        atkDamage = 10;
-        atkDelay = 1;
-        agent.speed = 35;
-        agent.stoppingDistance = 50;
+        atkDamage = 100;
+        atkDelay = 0;
+        agent.speed = 100;
+        agent.stoppingDistance = 0;
     }
 
     void Update()
     {
-        if (health <= 0)
+        if (target != null)
         {
-            Destroy(this.gameObject);
+            agent.destination = target.transform.position;
+        }
+        else
+        {
+            target = mainTower;
         }
 
-        if (Vector3.Distance(this.transform.position, target.transform.position) < 100)
+        if (Vector3.Distance(this.transform.position, target.transform.position) < 70)
         {
             if (!isAttacking && target != null)
             {
@@ -43,13 +45,9 @@ public class BasicEnemy : Enemy
             }
         }
 
-        if (target == null || target.GetHealth() <= 0)
+        if (health <= 0)
         {
-            target = mainTower;
-        }
-        else
-        {
-            agent.destination = target.transform.position;
+            Destroy(this.gameObject);
         }
     }
 
@@ -57,20 +55,18 @@ public class BasicEnemy : Enemy
     {
         if (other.CompareTag("Defender"))
         {
-
             target = other.gameObject.GetComponent<Defender>();
-
         }
-        else if (other.CompareTag("MainTower") && target != null)
+        else if (other.CompareTag("MainTower"))
         {
             target = other.gameObject.GetComponent<Defender>();
         }
     }
 
-    //private void OnTriggerExit(Collider other)
-    //{
-    //    target = null;
-    //}
+    private void OnTriggerExit(Collider other)
+    {
+        target = mainTower;
+    }
 
     IEnumerator Attack(Defender target)
     {
@@ -99,7 +95,7 @@ public class BasicEnemy : Enemy
     {
         // Set the positions for the LineRenderer
         lineRenderer.SetPosition(0, new Vector3(transform.position.x, lineRenderer.GetPosition(0).y, transform.position.z)); // Start at the enemy
-        lineRenderer.SetPosition(1, new Vector3(target.transform.position.x, target.transform.position.y+30, target.transform.position.z));    // End at the tower
+        lineRenderer.SetPosition(1, target.transform.position);    // End at the tower
 
         // Show the line
         lineRenderer.enabled = true;

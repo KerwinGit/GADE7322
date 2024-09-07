@@ -103,7 +103,7 @@ public class DefenderAttack : MonoBehaviour
     {
         if (targets.Count > 0)
         {
-            if (!isAttacking)
+            if (!isAttacking & targets.Peek() != null)
             {
                 StartCoroutine(Attack(targets.Peek().GetComponent<Enemy>()));
             }
