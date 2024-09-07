@@ -3,29 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Enemy : MonoBehaviour
+public abstract class Enemy : MonoBehaviour
 {
-    [SerializeField] private float speed  = 1;
-    [SerializeField] private int health = 100;
+    [SerializeField] protected GameManager gameManager;
+    [SerializeField] protected float atkDelay;
+    [SerializeField] protected int atkDamage;
+    [SerializeField] protected int health = 100;
 
-    private NavMeshAgent agent;
+    protected NavMeshAgent agent;
 
-    [SerializeField] private Transform mainTower;
-
-    private void Awake()
-    {
-        agent = GetComponent<NavMeshAgent>();
-    }
-
-    private void Update()
-    {
-        agent.destination = mainTower.position;
-
-        if(health<=0)
-        {
-            Destroy(this.gameObject);
-        }
-    }
+    [SerializeField] protected Defender mainTower;
+    [SerializeField] protected Defender target;
 
     public void TakeDamage(int damage) 
     {
@@ -35,11 +23,6 @@ public class Enemy : MonoBehaviour
     public int GetHealth() 
     {
         return health;
-    }
-
-    public float GetSpeed() 
-    {
-        return speed;
     }
     
 }

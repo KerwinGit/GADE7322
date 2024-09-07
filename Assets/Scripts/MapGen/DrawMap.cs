@@ -138,7 +138,7 @@ public class DrawMap : MonoBehaviour
         }
         else if(drawMode == DrawMode.Paths)
         {
-            display.DrawTexture(TextureGen.NoiseTexture(PathGen.Generate(mapSize, lineRenderers, smoothStart, smoothEnd)));
+            display.DrawTexture(TextureGen.NoiseTexture(PathGen.Generate(mapSize, lineRenderers, pathSmoothStart, pathSmoothEnd)));
         }
     }    
 

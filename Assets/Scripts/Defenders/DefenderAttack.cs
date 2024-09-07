@@ -88,7 +88,6 @@ public class DefenderAttack : MonoBehaviour
 {
     [SerializeField] private float atkDelay = 1;
     [SerializeField] private int atkDamage = 1;
-    [SerializeField] private GameObject mainTower;
     [SerializeField] private LineRenderer lineRenderer; // Reference to LineRenderer
     private Queue<GameObject> targets;
     private bool isAttacking = false;
@@ -106,22 +105,26 @@ public class DefenderAttack : MonoBehaviour
         {
             if (!isAttacking)
             {
-                StartCoroutine(attack(targets.Peek().GetComponent<Enemy>()));
+                StartCoroutine(Attack(targets.Peek().GetComponent<Enemy>()));
             }
         }
         else
         {
-            Debug.Log("No enemy Targeted");
+            //Debug.Log("No enemy Targeted");
         }
     }
 
-    IEnumerator attack(Enemy target)
+    IEnumerator Attack(Enemy target)
     {
         isAttacking = true;
         yield return new WaitForSeconds(atkDelay);
 
         // Show the attack line for a brief moment
-        VisualizeAttack(target);
+
+        if(target !=  null ) 
+        {
+            VisualizeAttack(target);
+        }
 
         // Deal damage to the enemy
         target.TakeDamage(atkDamage);
