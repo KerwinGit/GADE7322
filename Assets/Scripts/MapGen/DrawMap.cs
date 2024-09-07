@@ -51,6 +51,7 @@ public class DrawMap : MonoBehaviour
     public LineRendererSetup lineRenderersSetup;
 
     public GameObject meshGO;
+    public GameObject navMesh;
 
     private void Awake()
     {
@@ -84,7 +85,7 @@ public class DrawMap : MonoBehaviour
         Draw();
 
         meshGO.AddComponent<MeshCollider>();
-        meshGO.GetComponent<NavMeshSurface>().BuildNavMesh();
+        navMesh.GetComponent<NavMeshSurface>().BuildNavMesh();
     }
 
     public void Draw()
