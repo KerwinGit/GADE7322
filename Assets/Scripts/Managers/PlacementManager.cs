@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using TMPro;
 public class PlacementManager : MonoBehaviour
 {
     [SerializeField] private GameManager gameManager;
@@ -8,6 +8,9 @@ public class PlacementManager : MonoBehaviour
     [SerializeField] private bool clicked;
     [SerializeField] private LayerMask terrainLayer;
     [SerializeField] private float placementRadius = 0.2f; // Minimum distance between defenders
+
+    [SerializeField] private TMP_Text txtError;
+    [SerializeField] private UIManager uiManager;
 
     private void Update()
     {
@@ -36,18 +39,25 @@ public class PlacementManager : MonoBehaviour
                     }
                     else
                     {
+
+                        txtError.text = "Too close to another defender!";
                         Debug.Log("Too close to another defender.");
+                        uiManager.FlashErrorMessage();
                     }
                 }
                 else
                 {
+                    txtError.text = "Can only place on grey!";
                     Debug.Log("Can't place, Y is " + hit.point.y);
+                    uiManager.FlashErrorMessage();
                 }
             }
         }
         else
         {
+            txtError.text = "Not enough money!";
             Debug.Log("no money");
+            uiManager.FlashErrorMessage();
         }
 
     }

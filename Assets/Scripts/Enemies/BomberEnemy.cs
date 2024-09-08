@@ -92,7 +92,7 @@ public class BomberEnemy : Enemy
         isAttacking = false;
 
         Instantiate(explosionPF);
-
+        FindObjectOfType<CameraShake>().TriggerShake();
         TakeDamage(atkDamage);        
     }
 

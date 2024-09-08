@@ -52,6 +52,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 300
   cost: 10
+  isMain: 0
+  meshRenderer: {fileID: 8977592723504908220}
+  flashDuration: 0.1
 --- !u!120 &958810382628330689
 LineRenderer:
   serializedVersion: 2
