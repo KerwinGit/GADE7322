@@ -12,6 +12,12 @@ public class BomberEnemy : Enemy
 
     [SerializeField] private GameObject explosionPF;
 
+    private MeshRenderer meshRenderer; 
+    private Color originalColor;
+
+    public Color flashColor = Color.white;
+    public float flashDuration = 0.1f;
+
     private void Awake()
     {
         gameManager = FindAnyObjectByType<GameManager>();
@@ -21,13 +27,16 @@ public class BomberEnemy : Enemy
 
         agent = GetComponent<NavMeshAgent>();
 
-        lineRenderer = GetComponent<LineRenderer>();
+        meshRenderer = GetComponent<MeshRenderer>();
+        originalColor = meshRenderer.material.color;
 
         health = 60;
         atkDamage = 100;
         atkDelay = 0;
         agent.speed = 200;
         agent.stoppingDistance = 0;
+
+        Flash();
     }
 
     void Update()
@@ -47,6 +56,27 @@ public class BomberEnemy : Enemy
         {
             Destroy(this.gameObject);
         }
+    }
+
+    private void Flash()
+    {
+        StartCoroutine(FlashCoroutine());
+    }
+
+    private IEnumerator FlashCoroutine()
+    {
+        while (true)
+        {
+            meshRenderer.material.color = flashColor;
+
+            yield return new WaitForSeconds(flashDuration);
+
+            meshRenderer.material.color = originalColor;
+
+            yield return new WaitForSeconds(0.5f);
+
+        }
+        
     }
 
     IEnumerator Attack(Defender target)
