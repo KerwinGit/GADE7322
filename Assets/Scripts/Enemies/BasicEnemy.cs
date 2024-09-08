@@ -26,12 +26,14 @@ public class BasicEnemy : Enemy
         atkDelay = 1;
         agent.speed = 35;
         agent.stoppingDistance = 50;
+        value = 10;
     }
 
     void Update()
     {
         if (health <= 0)
         {
+            giveMoney();
             Destroy(this.gameObject);
         }
 

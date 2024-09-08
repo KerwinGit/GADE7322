@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class PlacementManager : MonoBehaviour
 {
+    [SerializeField] private GameManager gameManager;
     [SerializeField] private GameObject defenderPrefab;
     [SerializeField] private Color placeableColour;
     [SerializeField] private bool clicked;
@@ -18,27 +19,37 @@ public class PlacementManager : MonoBehaviour
 
     public void SpawnDefenderOnCursor()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, terrainLayer))
+        if (gameManager.getCurrentMoney() >= defenderPrefab.GetComponent<Defender>().getCost())
         {
-            if (hit.point.y < 40 && hit.point.y > 0.4f)
+
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, terrainLayer))
             {
-                // Check for nearby defenders
-                if (!IsTooCloseToAnotherDefender(hit.point))
+                if (hit.point.y < 40 && hit.point.y > 0.4f)
                 {
-                    Instantiate(defenderPrefab, hit.point, Quaternion.identity);
+                    // Check for nearby defenders
+                    if (!IsTooCloseToAnotherDefender(hit.point))
+                    {
+                        gameManager.removeMoney(defenderPrefab.GetComponent<Defender>().getCost());
+                        Instantiate(defenderPrefab, hit.point, Quaternion.identity);
+                    }
+                    else
+                    {
+                        Debug.Log("Too close to another defender.");
+                    }
                 }
                 else
                 {
-                    Debug.Log("Too close to another defender.");
+                    Debug.Log("Can't place, Y is " + hit.point.y);
                 }
             }
-            else
-            {
-                Debug.Log("Can't place, Y is " + hit.point.y);
-            }
         }
+        else
+        {
+            Debug.Log("no money");
+        }
+
     }
 
     private bool IsTooCloseToAnotherDefender(Vector3 spawnPoint)
