@@ -3,7 +3,7 @@ using UnityEngine;
 public class Defender : MonoBehaviour
 {
     [SerializeField] private int health = 100;
-
+    [SerializeField] private int cost = 10;
     private void Update()
     {
         if(health <=0)
@@ -20,6 +20,11 @@ public class Defender : MonoBehaviour
     public int GetHealth()
     {
         return health;
+    }
+
+    public int getCost() 
+    {
+        return cost;
     }
 
     

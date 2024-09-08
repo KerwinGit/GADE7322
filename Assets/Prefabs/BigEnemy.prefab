@@ -254,6 +254,7 @@ MonoBehaviour:
   atkDelay: 0
   atkDamage: 0
   health: 100
+  value: 20
   mainTower: {fileID: 0}
   target: {fileID: 0}
   lineRenderer: {fileID: 0}

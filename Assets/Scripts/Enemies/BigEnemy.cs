@@ -24,13 +24,15 @@ public class BigEnemy : Enemy
         atkDamage = 50;
         atkDelay = 3;
         agent.speed = 20;
-        agent.stoppingDistance = 75;                 
+        agent.stoppingDistance = 75;
+        value = 20;
     }
 
     void Update()
     {
         if (health <= 0)
         {
+            giveMoney();
             Destroy(this.gameObject);
         }
 

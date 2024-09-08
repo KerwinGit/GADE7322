@@ -9,6 +9,7 @@ public abstract class Enemy : MonoBehaviour
     [SerializeField] protected float atkDelay;
     [SerializeField] protected int atkDamage;
     [SerializeField] protected int health;
+    [SerializeField] protected int value;
 
     protected NavMeshAgent agent;
 
@@ -23,6 +24,11 @@ public abstract class Enemy : MonoBehaviour
     public int GetHealth() 
     {
         return health;
+    }
+
+    public void giveMoney() 
+    {
+        gameManager.addMoney(value);
     }
     
 }
