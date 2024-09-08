@@ -48,6 +48,7 @@ MonoBehaviour:
   - {fileID: 9101460546748860923, guid: 053941b20abec754192732dae293e69b, type: 3}
   - {fileID: 1190057881521107237, guid: e03eb90a8b06e3c46a3c69994a39027c, type: 3}
   - {fileID: 6734442395770600271, guid: 519c8e37629a3b74398e4f06fb849236, type: 3}
-  spawnTotal: 10
+  gameManager: {fileID: 0}
+  startTotal: 4
   bigProbability: 0.2
   bomberProbability: 0.05

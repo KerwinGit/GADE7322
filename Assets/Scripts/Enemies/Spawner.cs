@@ -6,9 +6,10 @@ public class Spawner : MonoBehaviour
 {
     [SerializeField] private GameObject[] enemyPrefabs;
 
-    private GameManager gameManager;
+    [SerializeField] private GameManager gameManager;
 
-    [SerializeField] private int spawnTotal = 10; //change this to increment with time
+    [SerializeField] private int startTotal = 5;
+    private int spawnTotal;
     private float basicProbability;
     [SerializeField] private float bigProbability;
     [SerializeField] private float bomberProbability;
@@ -16,7 +17,16 @@ public class Spawner : MonoBehaviour
 
     private void Awake()
     {
+        spawnTotal = startTotal + gameManager.incrementCount;
+
         specialProbability = bigProbability + bomberProbability;
+
+        //specialProbability = specialProbability * (gameManager.incrementCount + 0.5f);
+
+        //if(specialProbability > 0.5f)
+        //{
+        //    specialProbability = 0.5f;
+        //}
 
         basicProbability = 1f - specialProbability;
 

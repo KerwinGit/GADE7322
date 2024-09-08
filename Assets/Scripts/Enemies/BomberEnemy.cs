@@ -35,6 +35,7 @@ public class BomberEnemy : Enemy
         atkDelay = 0;
         agent.speed = 200;
         agent.stoppingDistance = 0;
+        value = 3;
 
         Flash();
     }

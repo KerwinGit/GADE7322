@@ -21,12 +21,12 @@ public class BasicEnemy : Enemy
 
         lineRenderer = GetComponent<LineRenderer>();
 
-        health = 50;
+        health = 20;
         atkDamage = 10;
         atkDelay = 1;
         agent.speed = 35;
         agent.stoppingDistance = 50;
-        value = 10;
+        value = 3;
     }
 
     void Update()

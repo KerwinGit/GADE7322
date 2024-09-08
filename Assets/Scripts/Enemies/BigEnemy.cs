@@ -25,7 +25,7 @@ public class BigEnemy : Enemy
         atkDelay = 3;
         agent.speed = 20;
         agent.stoppingDistance = 75;
-        value = 20;
+        value = 5;
     }
 
     void Update()

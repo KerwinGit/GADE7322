@@ -51,6 +51,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 300
+  cost: 10
 --- !u!120 &958810382628330689
 LineRenderer:
   serializedVersion: 2
@@ -259,6 +260,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac245c1f3585691419a28799ed1d5dfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  atkDelay: 1
-  atkDamage: 15
+  atkDelay: 0.5
+  atkDamage: 10
   lineRenderer: {fileID: 958810382628330689}
