@@ -9,13 +9,6 @@ public class CameraShake : MonoBehaviour
 
     private Vector3 initialPosition;
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Mouse1))
-        {
-            TriggerShake();
-        }
-    }
     private void Start()
     {
         // Store the initial camera position

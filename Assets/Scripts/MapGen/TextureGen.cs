@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
-public static class TextureGen
+public static class TextureGen  //draws 2d textures
 {
 
     public static Texture2D ColourTexture(Color[] colourMap, int width, int height)
