@@ -10,12 +10,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int currentMoney;
 
     private float elapsedTime = 0f;
-    private float lastIncrementTime = 0f;
+    [SerializeField] private float lastIncrementTime = 0f;
     private float incrementTime = 20f;
     public int incrementCount = 1;
 
     private float spawnTime = 10f;
-    private float lastSpawnTime = 0f;
+    [SerializeField] private float lastSpawnTime = 0f;
 
 
     [SerializeField] private List<GameObject> spawnerObjects;
@@ -60,13 +60,15 @@ public class GameManager : MonoBehaviour
     }
 
     private IEnumerator SpawnCoroutine()
-    {
+    {       
             int activateCount = incrementCount;
 
             if (activateCount > spawnerObjects.Count)
             {
                 activateCount = spawnerObjects.Count;
             }
+
+        //Debug.Log(activateCount);
 
             List<GameObject> shuffled = spawnerObjects;
             ShuffleList(shuffled);            
@@ -78,7 +80,7 @@ public class GameManager : MonoBehaviour
                 obj.SetActive(true);
             }
 
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(5f);
 
             for (int i = 0; i < activateCount; i++)
             {

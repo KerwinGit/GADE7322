@@ -35,6 +35,7 @@ public class Spawner : MonoBehaviour
 
     private void Spawn(int enemies)
     {
+        Debug.Log("spawn");
         for (int i = 0; i < enemies; i++)
         {
             float randomValue = Random.Range(0f, 1f);
