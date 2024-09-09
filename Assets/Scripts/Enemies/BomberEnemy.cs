@@ -35,13 +35,17 @@ public class BomberEnemy : Enemy
         atkDelay = 0;
         agent.speed = 200;
         agent.stoppingDistance = 0;
-        value = 3;
+        goldAmt = 3;
 
         Flash();
+
+        hpBar.maxValue = health;
     }
 
     void Update()
     {
+        hpBar.value = health;
+
         agent.destination = target.transform.position;
         
 

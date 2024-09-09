@@ -2,33 +2,49 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public abstract class Enemy : MonoBehaviour
 {
     [SerializeField] protected GameManager gameManager;
     [SerializeField] protected float atkDelay;
     [SerializeField] protected int atkDamage;
-    [SerializeField] protected int health;
-    [SerializeField] protected int value;
+    [SerializeField] protected float health;
+    [SerializeField] protected int goldAmt;
+
+    //protected float maxHP;
+
+    [SerializeField] protected Slider hpBar;
 
     protected NavMeshAgent agent;
 
     [SerializeField] protected Defender mainTower;
     [SerializeField] protected Defender target;
 
+    //private void Awake()
+    //{
+    //    maxHP = health;
+    //    hpBar.maxValue = maxHP;
+    //}
+
+    //private void Update()
+    //{
+    //    hpBar.value = health;
+    //}
+
     public void TakeDamage(int damage) 
     {
         health -= damage;
     }
 
-    public int GetHealth() 
+    public float GetHealth() 
     {
         return health;
     }
 
     public void giveMoney() 
     {
-        gameManager.addMoney(value);
+        gameManager.addMoney(goldAmt);
     }
     
 }

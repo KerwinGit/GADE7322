@@ -26,11 +26,15 @@ public class BasicEnemy : Enemy
         atkDelay = 1;
         agent.speed = 35;
         agent.stoppingDistance = 50;
-        value = 3;
+        goldAmt = 3;
+
+        hpBar.maxValue = health;
     }
 
     void Update()
     {
+        hpBar.value = health;
+
         if (health <= 0)
         {
             giveMoney();
