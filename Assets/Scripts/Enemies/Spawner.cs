@@ -15,7 +15,7 @@ public class Spawner : MonoBehaviour
     [SerializeField] private float bomberProbability;
     private float specialProbability;
 
-    private void Awake()
+    private void OnEnable()
     {
         spawnTotal = startTotal + gameManager.incrementCount;
 
