@@ -1,8 +1,9 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 public class Defender : MonoBehaviour
 {
-    [SerializeField] private int health = 100;
+    [SerializeField] public int health = 100;
     [SerializeField] private int cost = 10;
     [SerializeField] private bool isMain;
 
@@ -10,12 +11,18 @@ public class Defender : MonoBehaviour
     private Color originalColor;
     public float flashDuration = 0.1f;
 
-    private void Start()
+    [SerializeField] protected Slider hpBar;
+
+    private void Awake()
     {
+        hpBar.maxValue = health;
+
         originalColor = meshRenderer.material.color;
     }
     private void Update()
     {
+        hpBar.value = health;
+
         if(health <=0)
         {
             Destroy(this.gameObject);

@@ -43,6 +43,11 @@ public class GameManager : MonoBehaviour
 
             lastSpawnTime = elapsedTime;
         }
+
+        if(mainTower.GetComponent<Defender>().health <= 0)
+        {
+
+        }
     }
 
     private IEnumerator SpawnCoroutine()
@@ -59,7 +64,7 @@ public class GameManager : MonoBehaviour
 
             for (int i = 0; i < activateCount; i++)
             {
-                Debug.Log("active " + i + "]");
+                //Debug.Log("active " + i + "]");
                 GameObject obj = shuffled[i];
                 obj.SetActive(true);
             }
@@ -112,5 +117,10 @@ public class GameManager : MonoBehaviour
             list[k] = list[n];
             list[n] = value;
         }
+    }
+
+    private void Lose()
+    {
+        Time.timeScale = 0;
     }
 }
