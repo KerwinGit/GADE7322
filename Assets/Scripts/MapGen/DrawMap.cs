@@ -7,6 +7,7 @@ using Unity.AI.Navigation;
 
 public class DrawMap : MonoBehaviour
 {
+    //modes to help visualise the different textures drawn
     public enum DrawMode
     {
         NoiseMap,
@@ -17,39 +18,40 @@ public class DrawMap : MonoBehaviour
     }
     public DrawMode drawMode;
 
+    [Header("Dimensions")]
     public int width;
     public int height;
     public float scale;
 
+    [Header("Noise")]
     public int octaves;
     [Range(0f, 1f)]
     public float persistence;   //graininess
     public float lacunarity;    //cloudiness
-
     public int seed;            //affects sample points chosen
     public Vector2 offset;
-
     public float heightMulti;
     public AnimationCurve heightCurve;
-
     public bool autoUpdate;
 
+    [Header("Colour")]
     public Terrain[] regions;
 
+    [Header("Smoothing + Centre")]
     public float smoothStart;
     public float smoothEnd;
     public Vector2Int mapSize;
-
     public bool useFalloff;
     float[,] falloff;
 
-    public LineRenderer[] lineRenderers; // LineRenderers to flatten along
+    [Header("Paths")]
+    public LineRenderer[] lineRenderers;
     float[,] paths;
     public float pathSmoothStart;
     public float pathSmoothEnd;
-
     public LineRendererSetup lineRenderersSetup;
 
+    [Header("Mesh")]
     public GameObject meshGO;
     public GameObject navMesh;
 
@@ -57,8 +59,11 @@ public class DrawMap : MonoBehaviour
     {
         mapSize = new Vector2Int(width, height);
 
+        //creates centre texture map
         falloff = CentreValley.Generate(mapSize, smoothStart, smoothEnd);
 
+        //creates path texture map
+        lineRenderersSetup.SetupRandomAngledLineRenderers();
         paths = PathGen.Generate(mapSize, lineRenderers, pathSmoothStart, pathSmoothEnd);
 
         if (width < 1)
@@ -78,9 +83,8 @@ public class DrawMap : MonoBehaviour
             octaves = 0;
         }
 
+        //random seed from system clock
         seed =  System.DateTime.Now.Ticks.GetHashCode();
-
-        lineRenderersSetup.SetupRandomAngledLineRenderers();
 
         Draw();
 
@@ -120,6 +124,7 @@ public class DrawMap : MonoBehaviour
 
         DisplayMap display = FindObjectOfType<DisplayMap>();
 
+        //creates texture map/mesh based on mode selected
         if (drawMode == DrawMode.NoiseMap)
         {
             display.DrawTexture(TextureGen.NoiseTexture(map));
@@ -142,12 +147,13 @@ public class DrawMap : MonoBehaviour
         }
     }    
 
-    private void OnValidate()
+    private void OnValidate() // same as awake, just so that we can test generating in scene view
     {
         mapSize = new Vector2Int(width, height);
 
         falloff = CentreValley.Generate(mapSize, smoothStart, smoothEnd);
 
+        lineRenderersSetup.SetupRandomAngledLineRenderers();
         paths = PathGen.Generate(mapSize, lineRenderers, pathSmoothStart, pathSmoothEnd);
 
         if (width < 1)
@@ -167,7 +173,6 @@ public class DrawMap : MonoBehaviour
             octaves = 0;
         }
 
-        lineRenderersSetup.SetupRandomAngledLineRenderers();
 
         Draw();
     }

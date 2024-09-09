@@ -2,42 +2,44 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//class creates a texture which flattens 3 pathways leading from the centre of the map to the edge
+//this makes use of line renderers to generate a texture map with 3 flat lines with options for smoothing
+//by subtracting this height from noise map we can guarantee 3 paths for the enemies to move on
 public class PathGen
 {
     public static float[,] Generate(Vector2Int size, LineRenderer[] lineRenderers, float smoothStart, float smoothEnd)
     {
         float[,] heightMap = new float[size.x, size.y];
 
-        // Loop through each pixel in the height map
-        for (int y = 0; y < size.y; y++)
+        for (int y = 0; y < size.y; y++) //loops length(height) of map
         {
-            for (int x = 0; x < size.x; x++)
+            for (int x = 0; x < size.x; x++) //loops width of map
             {
-                // Convert (x, y) into a position in world space
-                Vector2 pixelPosition = new Vector2(
-                    (float)x / size.x * 2 - 1,
-                    (float)y / size.y * 2 - 1
+                //position on texture map
+                Vector2 position = new Vector2(
+                    1 - (float)x / size.x * 2 ,
+                    1 - (float)y / size.y * 2 
                 );
 
-                // Initialize height to maximum (e.g., no dip)
+                // initialize height to max
                 float minDistance = float.MaxValue;
 
-                // Check each LineRenderer to create dips
+                // check each linernderer to flatten
                 foreach (LineRenderer lr in lineRenderers)
                 {
-                    // Loop through each segment of the LineRenderer
+                    // loop through each segment of the LineRenderer
                     for (int i = 0; i < lr.positionCount - 1; i++)
                     {
                         Vector3 start = lr.GetPosition(i);
                         Vector3 end = lr.GetPosition(i + 1);
 
-                        // Find the closest point on the line segment to the pixel position
-                        Vector3 closestPoint = ClosestPointOnLineSegment(start, end, new Vector3(pixelPosition.x, 0, pixelPosition.y));
+                        // find the closest point on  line segment to pixel position
+                        Vector3 closestPoint = ClosestPointOnLineSegment(start, end, new Vector3(position.x, 0, position.y));
 
-                        // Calculate the distance from the pixel to the closest point on the line
-                        float distance = Vector3.Distance(closestPoint, new Vector3(pixelPosition.x, 0, pixelPosition.y));
+                        // calc distance from the pixel to  closest point on  line
+                        float distance = Vector3.Distance(closestPoint, new Vector3(position.x, 0, position.y));
 
-                        // Track the minimum distance for this pixel
+                        // track the minimum distance for this pixel
                         minDistance = Mathf.Min(minDistance, distance);
                     }
                 }
@@ -60,7 +62,7 @@ public class PathGen
         return heightMap;
     }
 
-    // Helper function to find the closest point on a line segment
+    // helper method to find the closest point on line segment
     private static Vector3 ClosestPointOnLineSegment(Vector3 start, Vector3 end, Vector3 point)
     {
         Vector3 lineDir = end - start;

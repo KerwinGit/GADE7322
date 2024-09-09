@@ -30,10 +30,13 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+
+        //time tracking
         elapsedTime += Time.deltaTime;
 
         timerText.text = elapsedTime.ToString("F1");
 
+        //increments difficulty
         if (elapsedTime - lastIncrementTime >= incrementTime)
         {
             incrementCount++;
@@ -41,6 +44,7 @@ public class GameManager : MonoBehaviour
             lastIncrementTime = elapsedTime;
         }
 
+        //spawn intervals
         if (elapsedTime - lastSpawnTime >= spawnTime)
         {
             StartCoroutine(SpawnCoroutine());
@@ -48,11 +52,13 @@ public class GameManager : MonoBehaviour
             lastSpawnTime = elapsedTime;
         }
 
+        //checks if dead
         if (mainTower.GetComponent<Defender>().health <= 0)
         {
             Lose();
         }
 
+        //pause
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             TogglePause();
@@ -60,53 +66,55 @@ public class GameManager : MonoBehaviour
     }
 
     private IEnumerator SpawnCoroutine()
-    {       
-            int activateCount = incrementCount;
+    {
+        int activateCount = incrementCount; //number of spawners to activate
 
-            if (activateCount > spawnerObjects.Count)
-            {
-                activateCount = spawnerObjects.Count;
-            }
+        if (activateCount > spawnerObjects.Count)
+        {
+            activateCount = spawnerObjects.Count;
+        }
 
         //Debug.Log(activateCount);
 
-            List<GameObject> shuffled = spawnerObjects;
-            ShuffleList(shuffled);            
 
-            for (int i = 0; i < activateCount; i++)
-            {
-                //Debug.Log("active " + i + "]");
-                GameObject obj = shuffled[i];
-                obj.SetActive(true);
-            }
+        //shuffles spawners and activates them randomly
+        List<GameObject> shuffled = spawnerObjects;
+        ShuffleList(shuffled);
 
-            yield return new WaitForSeconds(5f);
+        for (int i = 0; i < activateCount; i++)
+        {
+            //Debug.Log("active " + i + "]");
+            GameObject obj = shuffled[i];
+            obj.SetActive(true);
+        }
 
-            for (int i = 0; i < activateCount; i++)
-            {
-                GameObject obj = shuffled[i];
-                obj.SetActive(false);
-            }
+        yield return new WaitForSeconds(5f);
+
+        for (int i = 0; i < activateCount; i++)
+        {
+            GameObject obj = shuffled[i];
+            obj.SetActive(false);
+        }
 
         //StopCoroutine(SpawnCoroutine());
     }
 
-    public void addMoney(int money) 
+    public void addMoney(int money)
     {
         currentMoney += money;
     }
 
-    public void removeMoney(int money) 
+    public void removeMoney(int money)
     {
         currentMoney -= money;
     }
 
-    public void setCurrentMoney(int money) 
+    public void setCurrentMoney(int money)
     {
         currentMoney = money;
     }
 
-    public int getCurrentMoney() 
+    public int getCurrentMoney()
     {
         return currentMoney;
     }
@@ -116,7 +124,7 @@ public class GameManager : MonoBehaviour
         return elapsedTime;
     }
 
-    private void ShuffleList<T>(List<T> list)
+    private void ShuffleList<T>(List<T> list)     //helper method for shuffling spawners
     {
         System.Random rng = new System.Random();
         int n = list.Count;
@@ -134,12 +142,12 @@ public class GameManager : MonoBehaviour
     {
         scoreText.text = timerText.text;
         losePanel.SetActive(true);
-        Time.timeScale = 0;        
+        Time.timeScale = 0;
     }
 
     private void TogglePause()
     {
-        if(paused) 
+        if (paused)
         {
             Time.timeScale = 1;
             pausePanel.SetActive(false);
@@ -147,7 +155,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            pausePanel.SetActive(true );
+            pausePanel.SetActive(true);
             paused = true;
             Time.timeScale = 0;
 

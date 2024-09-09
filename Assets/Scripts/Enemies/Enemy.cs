@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
 
-public abstract class Enemy : MonoBehaviour
+public abstract class Enemy : MonoBehaviour //parent class
 {
     [SerializeField] protected GameManager gameManager;
     [SerializeField] protected float atkDelay;
@@ -20,17 +20,6 @@ public abstract class Enemy : MonoBehaviour
 
     [SerializeField] protected Defender mainTower;
     [SerializeField] protected Defender target;
-
-    //private void Awake()
-    //{
-    //    maxHP = health;
-    //    hpBar.maxValue = maxHP;
-    //}
-
-    //private void Update()
-    //{
-    //    hpBar.value = health;
-    //}
 
     public void TakeDamage(int damage) 
     {

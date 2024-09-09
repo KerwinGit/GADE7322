@@ -73,10 +73,6 @@ public class BasicEnemy : Enemy
         }
     }
 
-    //private void OnTriggerExit(Collider other)
-    //{
-    //    target = null;
-    //}
 
     IEnumerator Attack(Defender target)
     {

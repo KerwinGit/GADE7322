@@ -26,15 +26,10 @@ public class UIManager : MonoBehaviour
     }
     IEnumerator FlashText()
     {
-        // Flash twice (on, off, on, off)
-        for (int i = 0; i < 2; i++)
-        {
-            txtError.enabled = true;  // Turn the text on
-            yield return new WaitForSeconds(1f); // Wait for 1 second
+        txtError.enabled = true;  // Turn the text on
+        yield return new WaitForSeconds(1f); // Wait for 1 second
 
-            txtError.enabled = false; // Turn the text off
-            yield return new WaitForSeconds(0.5f); // Wait for 0.5 seconds
-        }
+        txtError.enabled = false; // Turn the text off
 
         // Make sure the text is off after flashing twice
         txtError.enabled = false;

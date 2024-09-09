@@ -21,13 +21,6 @@ public class Spawner : MonoBehaviour
 
         specialProbability = bigProbability + bomberProbability;
 
-        //specialProbability = specialProbability * (gameManager.incrementCount + 0.5f);
-
-        //if(specialProbability > 0.5f)
-        //{
-        //    specialProbability = 0.5f;
-        //}
-
         basicProbability = 1f - specialProbability;
 
         Spawn(spawnTotal);
@@ -40,6 +33,7 @@ public class Spawner : MonoBehaviour
         {
             float randomValue = Random.Range(0f, 1f);
 
+            //spawns according to probability of each class to spawn
             if (randomValue < basicProbability)
             {
                 Instantiate(enemyPrefabs[0], transform.position, Quaternion.identity);

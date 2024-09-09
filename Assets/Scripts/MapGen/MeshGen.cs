@@ -7,20 +7,26 @@ public static class MeshGen
     
     public static MapMesh GenTerrain(float[,] heightMap, float heightMulti, AnimationCurve heightCurve)
     {
+        //width and height from parameters
         int width = heightMap.GetLength(0);
         int height = heightMap.GetLength(1);
 
+        //top left corner to start generating from
         float topLeftX = (width - 1) / 2f;
         float topLeftZ = (height - 1) / 2f;
 
+        //creates new mesh
         MapMesh mapMesh = new MapMesh(width, height);
 
+        //tracks vertex array position
         int vertIndex = 0;
 
+        //nested loop for each position in height map
         for (int y = 0; y < height; y++) 
         {
             for (int x = 0; x < width; x++)
             {
+                //sets position of vertex with Y value calc from height map
                 mapMesh.verts[vertIndex] = new Vector3(topLeftX - x, heightCurve.Evaluate(heightMap[x,y]) * heightMulti, topLeftZ - y);
                 mapMesh.uvs[vertIndex] = new Vector2((float)x/width, (float)y/height);
 
@@ -66,7 +72,7 @@ public class MapMesh
     }
 
 
-
+    //method creates mesh
     public Mesh GenerateMesh()
     {
         Mesh mesh = new Mesh();
