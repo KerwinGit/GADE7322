@@ -14,7 +14,7 @@ public class PlacementManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        if (Input.GetKeyDown(KeyCode.Mouse0) && !gameManager.paused)
         {
             SpawnDefenderOnCursor();
         }

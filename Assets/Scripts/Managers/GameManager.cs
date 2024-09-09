@@ -22,7 +22,11 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] TMP_Text timerText;
 
+    public bool paused = false;
 
+    [SerializeField] private GameObject losePanel;
+    [SerializeField] private TMP_Text scoreText;
+    [SerializeField] private GameObject pausePanel;
 
     private void Update()
     {
@@ -37,16 +41,21 @@ public class GameManager : MonoBehaviour
             lastIncrementTime = elapsedTime;
         }
 
-        if(elapsedTime - lastSpawnTime >= spawnTime)
+        if (elapsedTime - lastSpawnTime >= spawnTime)
         {
             StartCoroutine(SpawnCoroutine());
 
             lastSpawnTime = elapsedTime;
         }
 
-        if(mainTower.GetComponent<Defender>().health <= 0)
+        if (mainTower.GetComponent<Defender>().health <= 0)
         {
+            Lose();
+        }
 
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            TogglePause();
         }
     }
 
@@ -121,6 +130,25 @@ public class GameManager : MonoBehaviour
 
     private void Lose()
     {
-        Time.timeScale = 0;
+        scoreText.text = timerText.text;
+        losePanel.SetActive(true);
+        Time.timeScale = 0;        
+    }
+
+    private void TogglePause()
+    {
+        if(paused) 
+        {
+            Time.timeScale = 1;
+            pausePanel.SetActive(false);
+            paused = false;
+        }
+        else
+        {
+            pausePanel.SetActive(true );
+            paused = true;
+            Time.timeScale = 0;
+
+        }
     }
 }
