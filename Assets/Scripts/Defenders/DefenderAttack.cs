@@ -10,6 +10,17 @@ public class DefenderAttack : MonoBehaviour
     private Queue<GameObject> targets;
     private bool isAttacking = false;
 
+    [SerializeField] private bool isAOE = false;
+    [SerializeField] private float aoeRadius = 10f;
+
+    private void OnValidate()
+    {
+        if (!isAOE)
+        {
+            aoeRadius = 0f;
+        }
+    }
+
     private void Awake()
     {
         targets = new Queue<GameObject>();
@@ -34,18 +45,57 @@ public class DefenderAttack : MonoBehaviour
 
     IEnumerator Attack(Enemy target)
     {
+
         isAttacking = true;
         yield return new WaitForSeconds(atkDelay);
 
         // Show the attack line for a brief moment
 
-        if(target !=  null ) 
+        if (target != null)
         {
             VisualizeAttack(target);
         }
 
         // Deal damage to the enemy
         target.TakeDamage(atkDamage);
+
+        if (isAOE)
+        {
+            Collider[] hitColliders = Physics.OverlapSphere(target.transform.position, 10f);
+            List<Enemy> enemiesInRange = new List<Enemy>();
+
+            foreach (var hitCollider in hitColliders)
+            {
+                if (hitCollider.CompareTag("Enemy"))
+                {
+                    Enemy enemy = hitCollider.GetComponent<Enemy>();
+                    if (enemy != null)
+                    {
+                        enemiesInRange.Add(enemy);
+                    }
+                }
+            }
+
+            LineRenderer aoeLines = GetComponent<LineRenderer>();
+            aoeLines.positionCount = enemiesInRange.Count * 2;
+
+            int index = 0;
+            foreach (var enemy in enemiesInRange)
+            {
+                // Add the starting point (main target position)
+                aoeLines.SetPosition(index, target.transform.position);
+
+                // Add the ending point (enemy position)
+                index++;
+                aoeLines.SetPosition(index, enemy.transform.position);
+
+                // Increment index for the next line
+                index++;
+
+                // Apply damage to each enemy
+                enemy.TakeDamage(atkDamage);
+            }
+        }
 
         // Remove the enemy from the queue if it's dead
         if (target.GetHealth() <= 0)
@@ -55,6 +105,8 @@ public class DefenderAttack : MonoBehaviour
 
         isAttacking = false;
     }
+
+
 
     private void OnTriggerEnter(Collider other)
     {

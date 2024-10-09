@@ -53,7 +53,7 @@ GameObject:
   - component: {fileID: 2563831639216596259}
   - component: {fileID: 6981042767969865783}
   m_Layer: 0
-  m_Name: Defender
+  m_Name: Defender 1
   m_TagString: Defender
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -305,8 +305,6 @@ MonoBehaviour:
   atkDelay: 0.5
   atkDamage: 10
   lineRenderer: {fileID: 958810382628330689}
-  isAOE: 1
-  aoeRadius: 20
 --- !u!1 &2404302868716616164
 GameObject:
   m_ObjectHideFlags: 0
