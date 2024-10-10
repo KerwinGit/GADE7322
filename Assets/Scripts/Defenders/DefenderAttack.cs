@@ -10,6 +10,17 @@ public class DefenderAttack : MonoBehaviour
     protected List<GameObject> targets; // Change to List<GameObject>
     protected bool isAttacking = false;
 
+    [SerializeField] private bool isAOE = false;
+    [SerializeField] private float aoeRadius = 10f;
+
+    private void OnValidate()
+    {
+        if (!isAOE)
+        {
+            aoeRadius = 0f;
+        }
+    }
+
     private void Awake()
     {
         targets = new List<GameObject>(); // Initialize as a List
@@ -58,6 +69,7 @@ public class DefenderAttack : MonoBehaviour
 
     protected virtual IEnumerator Attack(Enemy target)
     {
+
         isAttacking = true;
         yield return new WaitForSeconds(atkDelay);
 
@@ -72,6 +84,8 @@ public class DefenderAttack : MonoBehaviour
 
         isAttacking = false;
     }
+
+
 
     private void OnTriggerEnter(Collider other)
     {
