@@ -12,6 +12,9 @@ public class PlacementManager : MonoBehaviour
     [SerializeField] private TMP_Text txtError;
     [SerializeField] private UIManager uiManager;
 
+    [SerializeField] private DefenderAttack defenderArr;
+
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Mouse0) && !gameManager.paused)

@@ -10,46 +10,11 @@ public class DefenderAttack : MonoBehaviour
     protected List<GameObject> targets; // Change to List<GameObject>
     protected bool isAttacking = false;
 
-    [SerializeField] private bool isAOE = false;
-    [SerializeField] private float aoeRadius = 10f;
-
-    private void OnValidate()
-    {
-        if (!isAOE)
-        {
-            aoeRadius = 0f;
-        }
-    }
-
     private void Awake()
     {
         targets = new List<GameObject>(); // Initialize as a List
         lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.enabled = false; // Start with line renderer disabled
-    }
-
-    private void OnEnable()
-    {
-        // Subscribe to the OnDeath event
-        foreach (var target in targets)
-        {
-            if (target != null)
-            {
-                target.GetComponent<Enemy>().OnDeath += RemoveTarget;
-            }
-        }
-    }
-
-    private void OnDisable()
-    {
-        // Unsubscribe from the OnDeath event
-        foreach (var target in targets)
-        {
-            if (target != null)
-            {
-                target.GetComponent<Enemy>().OnDeath -= RemoveTarget;
-            }
-        }
     }
 
     private void Update()
@@ -69,7 +34,6 @@ public class DefenderAttack : MonoBehaviour
 
     protected virtual IEnumerator Attack(Enemy target)
     {
-
         isAttacking = true;
         yield return new WaitForSeconds(atkDelay);
 
@@ -82,17 +46,20 @@ public class DefenderAttack : MonoBehaviour
         // Deal damage to the enemy
         target.TakeDamage(atkDamage);
 
+        // Remove the enemy from the list if it's dead
+        if (target.GetHealth() <= 0)
+        {
+            RemoveTarget(target.gameObject); // Remove the specific enemy
+        }
+
         isAttacking = false;
     }
-
-
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Enemy") && !targets.Contains(other.gameObject)) // Avoid duplicates
         {
             targets.Add(other.gameObject); // Add to List
-            other.GetComponent<Enemy>().OnDeath += RemoveTarget; // Subscribe to OnDeath
         }
     }
 
@@ -107,8 +74,8 @@ public class DefenderAttack : MonoBehaviour
     protected void VisualizeAttack(Enemy target)
     {
         // Set the positions for the LineRenderer
-        lineRenderer.SetPosition(0, transform.position); // Start at the tower
-        lineRenderer.SetPosition(1, target.transform.position); // End at the enemy
+        lineRenderer.SetPosition(0, new Vector3(transform.position.x, lineRenderer.GetPosition(0).y, transform.position.z)); // Start at the tower
+        lineRenderer.SetPosition(1, target.transform.position);    // End at the enemy
 
         // Show the line
         lineRenderer.enabled = true;
@@ -127,11 +94,5 @@ public class DefenderAttack : MonoBehaviour
     {
         // Remove the specific target from the list
         targets.Remove(target);
-    }
-
-    // New overload for RemoveTarget to handle the event
-    protected void RemoveTarget(Enemy enemy)
-    {
-        RemoveTarget(enemy.gameObject); // Remove the GameObject from targets
     }
 }
