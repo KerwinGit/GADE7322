@@ -12,6 +12,7 @@ public class DefenderAttack : MonoBehaviour
 
     private void Awake()
     {
+
         targets = new List<GameObject>(); // Initialize as a List
         lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.enabled = false; // Start with line renderer disabled
@@ -35,25 +36,30 @@ public class DefenderAttack : MonoBehaviour
 
     protected virtual IEnumerator Attack(Enemy target)
     {
-        isAttacking = true;
-        yield return new WaitForSeconds(atkDelay);
-
-        // Show the attack line for a brief moment
         if (target != null)
         {
-            VisualizeAttack(target);
+            isAttacking = true;
+            yield return new WaitForSeconds(atkDelay);
+
+            // Show the attack line for a brief moment
+            if (target != null)
+            {
+                VisualizeAttack(target);
+            }
+
+            // Deal damage to the enemy
+            target.TakeDamage(atkDamage);
+
+            // Remove the enemy from the list if it's dead
+            
+            if (target != null && target.GetHealth() <= 0)
+            {
+                RemoveTarget(target.gameObject); // Remove the specific enemy
+            }
+
+            isAttacking = false;
         }
 
-        // Deal damage to the enemy
-        target.TakeDamage(atkDamage);
-
-        // Remove the enemy from the list if it's dead
-        if (target.GetHealth() <= 0)
-        {
-            RemoveTarget(target.gameObject); // Remove the specific enemy
-        }
-
-        isAttacking = false;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -72,7 +78,7 @@ public class DefenderAttack : MonoBehaviour
         }
     }
 
-    protected void VisualizeAttack(Enemy target)
+    protected virtual void VisualizeAttack(Enemy target)
     {
         // Set the positions for the LineRenderer
         lineRenderer.SetPosition(0, new Vector3(transform.position.x, lineRenderer.GetPosition(0).y, transform.position.z)); // Start at the tower

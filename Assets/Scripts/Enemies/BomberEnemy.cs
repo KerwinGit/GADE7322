@@ -18,6 +18,11 @@ public class BomberEnemy : Enemy
     public Color flashColor = Color.white;
     public float flashDuration = 0.1f;
 
+    [Header("Camera Shake")]
+    [SerializeField] private float shakeDuration = 0.5f;
+    [SerializeField] private float shakeMagnitude = 5f;
+    [SerializeField] private float dampingSpeed = 0.7f;
+
     private void Awake()
     {
         gameManager = FindAnyObjectByType<GameManager>();
@@ -96,7 +101,7 @@ public class BomberEnemy : Enemy
         isAttacking = false;
 
         Instantiate(explosionPF);
-        FindObjectOfType<CameraShake>().TriggerShake();
+        FindObjectOfType<CameraShake>().TriggerShake(shakeDuration, shakeMagnitude, dampingSpeed);
         TakeDamage(atkDamage);        
     }
 

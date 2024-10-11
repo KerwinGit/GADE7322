@@ -307,6 +307,10 @@ MonoBehaviour:
   lineRenderer: {fileID: 958810382628330689}
   maxTargets: 5
   lineDuration: 0.1
+  explosionEffect: {fileID: 846810274425011311, guid: 62cd123be926e3443b6056799fa29699, type: 3}
+  shakeDuration: 0.5
+  shakeMagnitude: 2
+  dampingSpeed: 0.7
 --- !u!1 &2404302868716616164
 GameObject:
   m_ObjectHideFlags: 0
