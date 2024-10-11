@@ -15,6 +15,7 @@ public class DefenderAttack : MonoBehaviour
         targets = new List<GameObject>(); // Initialize as a List
         lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.enabled = false; // Start with line renderer disabled
+        StartCoroutine(CleanUpNullTargets());
     }
 
     private void Update()
@@ -94,5 +95,17 @@ public class DefenderAttack : MonoBehaviour
     {
         // Remove the specific target from the list
         targets.Remove(target);
+    }
+
+    private IEnumerator CleanUpNullTargets()
+    {
+        while (true)
+        {
+            // Remove null targets from the list
+            targets.RemoveAll(target => target == null);
+
+            // Wait for a short duration before checking again
+            yield return new WaitForSeconds(0.5f);
+        }
     }
 }

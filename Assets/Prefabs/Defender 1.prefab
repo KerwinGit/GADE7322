@@ -304,9 +304,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   atkDelay: 1
   atkDamage: 10
-  lineRenderer: {fileID: 0}
+  lineRenderer: {fileID: 958810382628330689}
   maxTargets: 5
-  attackSpreadAngle: 15
+  lineDuration: 0.1
 --- !u!1 &2404302868716616164
 GameObject:
   m_ObjectHideFlags: 0
