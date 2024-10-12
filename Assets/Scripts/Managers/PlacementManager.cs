@@ -10,6 +10,7 @@ public class PlacementManager : MonoBehaviour
     [SerializeField] private GameObject selectedDefender;
     [SerializeField] private GameObject[] defenderArr;
     [SerializeField] private TMP_Text txtSelectedDefender;
+    [SerializeField] private TMP_Text txtDefenderCost;
 
     [Header("Other Goodies")]
     [SerializeField] private Color placeableColour;
@@ -23,6 +24,7 @@ public class PlacementManager : MonoBehaviour
     private void Awake()
     {
         txtSelectedDefender.text = "Selected Defender\n" + selectedDefender.name;
+        txtDefenderCost.text = "Defender Cost: " + selectedDefender.GetComponent<Defender>().getCost();
     }
 
     private void Update()
@@ -106,5 +108,6 @@ public class PlacementManager : MonoBehaviour
     {
         selectedDefender = defenderArr[defenderIndex];
         txtSelectedDefender.text = "Selected Defender\n" + selectedDefender.name;
+        txtDefenderCost.text = "Defender Cost: " + selectedDefender.GetComponent<Defender>().getCost();
     }
 }
