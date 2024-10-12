@@ -53,7 +53,7 @@ GameObject:
   - component: {fileID: 2563831639216596259}
   - component: {fileID: 6981042767969865783}
   m_Layer: 0
-  m_Name: Defender
+  m_Name: Basic Tower
   m_TagString: Defender
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

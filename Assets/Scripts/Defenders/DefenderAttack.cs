@@ -4,75 +4,81 @@ using UnityEngine;
 
 public class DefenderAttack : MonoBehaviour
 {
-    [SerializeField] private float atkDelay = 1;
-    [SerializeField] private int atkDamage = 1;
-    [SerializeField] private LineRenderer lineRenderer; // Reference to LineRenderer
-    private Queue<GameObject> targets;
-    private bool isAttacking = false;
+    [SerializeField] protected float atkDelay = 1;
+    [SerializeField] protected int atkDamage = 1;
+    [SerializeField] protected LineRenderer lineRenderer; // Reference to LineRenderer
+    protected List<GameObject> targets; // Change to List<GameObject>
+    protected bool isAttacking = false;
 
     private void Awake()
     {
-        targets = new Queue<GameObject>();
+
+        targets = new List<GameObject>(); // Initialize as a List
         lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.enabled = false; // Start with line renderer disabled
+        StartCoroutine(CleanUpNullTargets());
     }
 
     private void Update()
     {
         if (targets.Count > 0)
         {
-            if (!isAttacking & targets.Peek() != null)
+            if (!isAttacking && targets[0] != null) // Use index for List
             {
-                StartCoroutine(Attack(targets.Peek().GetComponent<Enemy>()));
+                StartCoroutine(Attack(targets[0].GetComponent<Enemy>()));
             }
         }
         else
         {
-            //Debug.Log("No enemy Targeted");
+            // Debug.Log("No enemy Targeted");
         }
     }
 
-    IEnumerator Attack(Enemy target)
+    protected virtual IEnumerator Attack(Enemy target)
     {
-        isAttacking = true;
-        yield return new WaitForSeconds(atkDelay);
-
-        // Show the attack line for a brief moment
-
-        if(target !=  null ) 
+        if (target != null)
         {
-            VisualizeAttack(target);
+            isAttacking = true;
+            yield return new WaitForSeconds(atkDelay);
+
+            // Show the attack line for a brief moment
+            if (target != null)
+            {
+                VisualizeAttack(target);
+            }
+
+            // Deal damage to the enemy
+            target.TakeDamage(atkDamage);
+
+            // Remove the enemy from the list if it's dead
+            
+            if (target != null && target.GetHealth() <= 0)
+            {
+                RemoveTarget(target.gameObject); // Remove the specific enemy
+            }
+
+            isAttacking = false;
         }
 
-        // Deal damage to the enemy
-        target.TakeDamage(atkDamage);
-
-        // Remove the enemy from the queue if it's dead
-        if (target.GetHealth() <= 0)
-        {
-            targets.Dequeue();
-        }
-
-        isAttacking = false;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Enemy")
+        if (other.CompareTag("Enemy") && !targets.Contains(other.gameObject)) // Avoid duplicates
         {
-            targets.Enqueue(other.gameObject);
+            targets.Add(other.gameObject); // Add to List
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject == targets.Peek())
+        if (other.gameObject == targets[0]) // Check if it's the first target
         {
-            targets.Dequeue();
+            RemoveTarget(other.gameObject); // Remove the specific enemy
         }
     }
 
-    private void VisualizeAttack(Enemy target)
+    protected virtual void VisualizeAttack(Enemy target)
     {
         // Set the positions for the LineRenderer
         lineRenderer.SetPosition(0, new Vector3(transform.position.x, lineRenderer.GetPosition(0).y, transform.position.z)); // Start at the tower
@@ -85,9 +91,27 @@ public class DefenderAttack : MonoBehaviour
         StartCoroutine(HideLineAfterDelay(0.1f)); // Hide after 0.1 seconds
     }
 
-    IEnumerator HideLineAfterDelay(float delay)
+    private IEnumerator HideLineAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
         lineRenderer.enabled = false;
+    }
+
+    protected void RemoveTarget(GameObject target)
+    {
+        // Remove the specific target from the list
+        targets.Remove(target);
+    }
+
+    private IEnumerator CleanUpNullTargets()
+    {
+        while (true)
+        {
+            // Remove null targets from the list
+            targets.RemoveAll(target => target == null);
+
+            // Wait for a short duration before checking again
+            yield return new WaitForSeconds(0.5f);
+        }
     }
 }

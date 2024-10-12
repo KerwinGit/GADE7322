@@ -1,9 +1,18 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.EventSystems; // Import to detect UI elements
+
 public class PlacementManager : MonoBehaviour
 {
     [SerializeField] private GameManager gameManager;
-    [SerializeField] private GameObject defenderPrefab;
+
+    [Header("Defenders")]
+    [SerializeField] private GameObject selectedDefender;
+    [SerializeField] private GameObject[] defenderArr;
+    [SerializeField] private TMP_Text txtSelectedDefender;
+    [SerializeField] private TMP_Text txtDefenderCost;
+
+    [Header("Other Goodies")]
     [SerializeField] private Color placeableColour;
     [SerializeField] private bool clicked;
     [SerializeField] private LayerMask terrainLayer;
@@ -12,19 +21,33 @@ public class PlacementManager : MonoBehaviour
     [SerializeField] private TMP_Text txtError;
     [SerializeField] private UIManager uiManager;
 
+    private void Awake()
+    {
+        txtSelectedDefender.text = "Selected Defender\n" + selectedDefender.name;
+        txtDefenderCost.text = "Defender Cost: " + selectedDefender.GetComponent<Defender>().getCost();
+    }
+
     private void Update()
     {
+        // Check for left mouse button click and ensure game is not paused
         if (Input.GetKeyDown(KeyCode.Mouse0) && !gameManager.paused)
         {
-            SpawnDefenderOnCursor();
+            // Ensure mouse is not over a UI element before placing a defender
+            if (!IsPointerOverUI())
+            {
+                SpawnDefenderOnCursor();
+            }
+            else
+            {
+                Debug.Log("Pointer is over UI, not placing defender.");
+            }
         }
     }
 
     public void SpawnDefenderOnCursor()
     {
-        if (gameManager.getCurrentMoney() >= defenderPrefab.GetComponent<Defender>().getCost())
+        if (gameManager.getCurrentMoney() >= selectedDefender.GetComponent<Defender>().getCost())
         {
-
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, terrainLayer))
@@ -34,12 +57,11 @@ public class PlacementManager : MonoBehaviour
                     // Check for nearby defenders
                     if (!IsTooCloseToAnotherDefender(hit.point))
                     {
-                        gameManager.removeMoney(defenderPrefab.GetComponent<Defender>().getCost());
-                        Instantiate(defenderPrefab, hit.point, Quaternion.identity);
+                        gameManager.removeMoney(selectedDefender.GetComponent<Defender>().getCost());
+                        Instantiate(selectedDefender, hit.point, Quaternion.identity);
                     }
                     else
                     {
-
                         txtError.text = "Too close to another defender!";
                         Debug.Log("Too close to another defender.");
                         uiManager.FlashErrorMessage();
@@ -56,10 +78,9 @@ public class PlacementManager : MonoBehaviour
         else
         {
             txtError.text = "Not enough money!";
-            Debug.Log("no money");
+            Debug.Log("No money");
             uiManager.FlashErrorMessage();
         }
-
     }
 
     private bool IsTooCloseToAnotherDefender(Vector3 spawnPoint)
@@ -76,5 +97,17 @@ public class PlacementManager : MonoBehaviour
         }
         return false; // No defenders are too close
     }
-}
 
+    // Method to detect if the pointer is over a UI element
+    private bool IsPointerOverUI()
+    {
+        return EventSystem.current.IsPointerOverGameObject(); // Detect if mouse is over UI
+    }
+
+    public void switchSelectedDefender(int defenderIndex)
+    {
+        selectedDefender = defenderArr[defenderIndex];
+        txtSelectedDefender.text = "Selected Defender\n" + selectedDefender.name;
+        txtDefenderCost.text = "Defender Cost: " + selectedDefender.GetComponent<Defender>().getCost();
+    }
+}

@@ -101,7 +101,7 @@ public class BasicEnemy : Enemy
     {
         // Set the positions for the LineRenderer
         lineRenderer.SetPosition(0, new Vector3(transform.position.x, lineRenderer.GetPosition(0).y, transform.position.z)); // Start at the enemy
-        lineRenderer.SetPosition(1, new Vector3(target.transform.position.x, target.transform.position.y+30, target.transform.position.z));    // End at the tower
+        lineRenderer.SetPosition(1, new Vector3(target.transform.position.x, target.transform.position.y + 30, target.transform.position.z));    // End at the tower
 
         // Show the line
         lineRenderer.enabled = true;
