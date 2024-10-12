@@ -3,7 +3,13 @@ using TMPro;
 public class PlacementManager : MonoBehaviour
 {
     [SerializeField] private GameManager gameManager;
-    [SerializeField] private GameObject defenderPrefab;
+
+    [Header("Defenders")]
+    [SerializeField] private GameObject selectedDefender;
+    [SerializeField] private GameObject [] defenderArr;
+    [SerializeField] private TMP_Text txtSelectedDefender;
+
+    [Header("Other Goodies")]
     [SerializeField] private Color placeableColour;
     [SerializeField] private bool clicked;
     [SerializeField] private LayerMask terrainLayer;
@@ -12,7 +18,10 @@ public class PlacementManager : MonoBehaviour
     [SerializeField] private TMP_Text txtError;
     [SerializeField] private UIManager uiManager;
 
-    [SerializeField] private DefenderAttack defenderArr;
+    private void Awake()
+    {
+        txtSelectedDefender.text = "Selected Defender\n" + selectedDefender.name;
+    }
 
 
     private void Update()
@@ -25,7 +34,7 @@ public class PlacementManager : MonoBehaviour
 
     public void SpawnDefenderOnCursor()
     {
-        if (gameManager.getCurrentMoney() >= defenderPrefab.GetComponent<Defender>().getCost())
+        if (gameManager.getCurrentMoney() >= selectedDefender.GetComponent<Defender>().getCost())
         {
 
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -37,8 +46,8 @@ public class PlacementManager : MonoBehaviour
                     // Check for nearby defenders
                     if (!IsTooCloseToAnotherDefender(hit.point))
                     {
-                        gameManager.removeMoney(defenderPrefab.GetComponent<Defender>().getCost());
-                        Instantiate(defenderPrefab, hit.point, Quaternion.identity);
+                        gameManager.removeMoney(selectedDefender.GetComponent<Defender>().getCost());
+                        Instantiate(selectedDefender, hit.point, Quaternion.identity);
                     }
                     else
                     {
@@ -78,6 +87,12 @@ public class PlacementManager : MonoBehaviour
             }
         }
         return false; // No defenders are too close
+    }
+
+    public void switchSelectedDefender(int defenderIndex) 
+    {
+        selectedDefender = defenderArr[defenderIndex];
+        txtSelectedDefender.text = "Selected Defender\n" + selectedDefender.name;
     }
 }
 
