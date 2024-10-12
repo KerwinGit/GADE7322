@@ -17,13 +17,17 @@ public class Spawner : MonoBehaviour
 
     private void OnEnable()
     {
-        spawnTotal = startTotal + gameManager.incrementCount;
+        //spawnTotal = startTotal + gameManager.waveCount;
 
-        specialProbability = bigProbability + bomberProbability;
+        //specialProbability = bigProbability + bomberProbability;
 
-        basicProbability = 1f - specialProbability;
+        //basicProbability = 1f - specialProbability;
 
-        Spawn(spawnTotal);
+        //Spawn(spawnTotal);
+
+        int Wave = gameManager.getWaveCount();
+
+        SpawnEnemies(Wave);
     }
 
     private void Spawn(int enemies)
@@ -54,4 +58,44 @@ public class Spawner : MonoBehaviour
 
         }
     }
+
+    int CalculateTotalEnemies(int waveNumber)
+    {
+        int baseEnemyCount = 5;
+        float scalingFactor = 1.1f;
+        return Mathf.RoundToInt(baseEnemyCount * Mathf.Pow(scalingFactor, waveNumber - 1));
+    }
+
+    (int normal, int big, int bomber) CalculateEnemyTypes(int waveNumber, int totalEnemies)
+    {
+        float normalEnemyProportion = Mathf.Max(0.7f - waveNumber * 0.02f, 0.5f);
+        float bigEnemyProportion = Mathf.Min(0.25f + waveNumber * 0.015f, 0.35f);
+        //float bomberEnemyProportion = 1.0f - (normalEnemyProportion + bigEnemyProportion);
+
+        int normalEnemyCount = Mathf.RoundToInt(totalEnemies * normalEnemyProportion);
+        int bigEnemyCount = Mathf.RoundToInt(totalEnemies * bigEnemyProportion);
+        int bomberEnemyCount = totalEnemies - (normalEnemyCount + bigEnemyCount);
+
+        return (normalEnemyCount, bigEnemyCount, bomberEnemyCount);
+    }
+
+    void SpawnEnemies(int waveNumber)
+    {
+        int totalEnemies = CalculateTotalEnemies(waveNumber);
+        var (normal, big, bomber) = CalculateEnemyTypes(waveNumber, totalEnemies);
+
+        for (int i = 0; i < normal; i++) 
+        {
+            Instantiate(enemyPrefabs[0], transform.position, Quaternion.identity);
+        }
+        for (int i = 0; i < big; i++)
+        {
+            Instantiate(enemyPrefabs[1], transform.position, Quaternion.identity);
+        }
+        for (int i = 0; i < bomber; i++)
+        {
+            Instantiate(enemyPrefabs[2], transform.position, Quaternion.identity);
+        }
+    }
+
 }
