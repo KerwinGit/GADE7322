@@ -1,12 +1,14 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.EventSystems; // Import to detect UI elements
+
 public class PlacementManager : MonoBehaviour
 {
     [SerializeField] private GameManager gameManager;
 
     [Header("Defenders")]
     [SerializeField] private GameObject selectedDefender;
-    [SerializeField] private GameObject [] defenderArr;
+    [SerializeField] private GameObject[] defenderArr;
     [SerializeField] private TMP_Text txtSelectedDefender;
 
     [Header("Other Goodies")]
@@ -23,12 +25,20 @@ public class PlacementManager : MonoBehaviour
         txtSelectedDefender.text = "Selected Defender\n" + selectedDefender.name;
     }
 
-
     private void Update()
     {
+        // Check for left mouse button click and ensure game is not paused
         if (Input.GetKeyDown(KeyCode.Mouse0) && !gameManager.paused)
         {
-            SpawnDefenderOnCursor();
+            // Ensure mouse is not over a UI element before placing a defender
+            if (!IsPointerOverUI())
+            {
+                SpawnDefenderOnCursor();
+            }
+            else
+            {
+                Debug.Log("Pointer is over UI, not placing defender.");
+            }
         }
     }
 
@@ -36,7 +46,6 @@ public class PlacementManager : MonoBehaviour
     {
         if (gameManager.getCurrentMoney() >= selectedDefender.GetComponent<Defender>().getCost())
         {
-
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, terrainLayer))
@@ -51,7 +60,6 @@ public class PlacementManager : MonoBehaviour
                     }
                     else
                     {
-
                         txtError.text = "Too close to another defender!";
                         Debug.Log("Too close to another defender.");
                         uiManager.FlashErrorMessage();
@@ -68,10 +76,9 @@ public class PlacementManager : MonoBehaviour
         else
         {
             txtError.text = "Not enough money!";
-            Debug.Log("no money");
+            Debug.Log("No money");
             uiManager.FlashErrorMessage();
         }
-
     }
 
     private bool IsTooCloseToAnotherDefender(Vector3 spawnPoint)
@@ -89,10 +96,15 @@ public class PlacementManager : MonoBehaviour
         return false; // No defenders are too close
     }
 
-    public void switchSelectedDefender(int defenderIndex) 
+    // Method to detect if the pointer is over a UI element
+    private bool IsPointerOverUI()
+    {
+        return EventSystem.current.IsPointerOverGameObject(); // Detect if mouse is over UI
+    }
+
+    public void switchSelectedDefender(int defenderIndex)
     {
         selectedDefender = defenderArr[defenderIndex];
         txtSelectedDefender.text = "Selected Defender\n" + selectedDefender.name;
     }
 }
-
