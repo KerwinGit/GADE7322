@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -28,6 +29,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject losePanel;
     [SerializeField] private TMP_Text scoreText;
     [SerializeField] private GameObject pausePanel;
+
+    [Header("Spawn Bias")]
+    public float xSpawnBias = 0;
+    public float zSpawnBias = 0;
 
 
     private void Start()
@@ -82,7 +87,8 @@ public class GameManager : MonoBehaviour
 
         //shuffles spawners and activates them randomly
         List<GameObject> shuffled = spawnerObjects;
-        ShuffleList(shuffled);
+
+        SortSpawnByPos(shuffled);
 
         for (int i = 0; i < activateCount; i++)
         {
@@ -139,6 +145,45 @@ public class GameManager : MonoBehaviour
             list[k] = list[n];
             list[n] = value;
         }
+    }
+
+    private void SortSpawnByPos(List<GameObject> list)
+    {
+        List<GameObject> sortedSpawners;
+
+        if (xSpawnBias <= 0)
+        {
+            if(zSpawnBias <= 0)
+            {
+                sortedSpawners = list.OrderByDescending(obj => obj.transform.position.x)
+                               .ThenByDescending(obj => obj.transform.position.z)
+                               .ToList();
+            }
+            else
+            {
+                sortedSpawners = list.OrderByDescending(obj => obj.transform.position.x)
+                               .ThenBy(obj => obj.transform.position.z)
+                               .ToList();
+            }
+        }
+        else
+        {
+            if (zSpawnBias <= 0)
+            {
+                sortedSpawners = list.OrderBy(obj => obj.transform.position.x)
+                               .ThenByDescending(obj => obj.transform.position.z)
+                               .ToList();                
+            }
+            else
+            {                
+                sortedSpawners = list.OrderBy(obj => obj.transform.position.x)
+                               .ThenBy(obj => obj.transform.position.z)
+                               .ToList();
+            }
+        }        
+
+        list.Clear();
+        list.AddRange(sortedSpawners);
     }
 
     private void Lose()

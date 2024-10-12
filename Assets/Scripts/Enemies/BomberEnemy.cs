@@ -64,6 +64,7 @@ public class BomberEnemy : Enemy
 
         if (health <= 0)
         {
+            giveMoney();
             Destroy(this.gameObject);
         }
     }
@@ -102,7 +103,8 @@ public class BomberEnemy : Enemy
 
         Instantiate(explosionPF);
         FindObjectOfType<CameraShake>().TriggerShake(shakeDuration, shakeMagnitude, dampingSpeed);
-        TakeDamage(atkDamage);        
+
+        Destroy(this.gameObject);
     }
 
 }

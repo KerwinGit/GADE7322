@@ -22,7 +22,7 @@ public class ShotgunTower : DefenderAttack
         {
             VisualizeAttack(target);
             Instantiate(explosionEffect, target.transform.position, Quaternion.identity);
-            FindObjectOfType<CameraShake>().TriggerShake(shakeDuration, shakeMagnitude, dampingSpeed);
+            //FindObjectOfType<CameraShake>().TriggerShake(shakeDuration, shakeMagnitude, dampingSpeed);
             // Get all enemies within the attack range
             List<Enemy> enemiesInRange = new List<Enemy>();
 

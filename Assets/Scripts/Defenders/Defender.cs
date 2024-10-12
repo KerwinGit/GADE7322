@@ -1,8 +1,11 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.Events;
 public class Defender : MonoBehaviour
 {
+    [SerializeField] protected GameManager gameManager;
+
     [SerializeField] public int health = 100;
     [SerializeField] private int cost = 10;
     [SerializeField] private bool isMain;
@@ -15,6 +18,8 @@ public class Defender : MonoBehaviour
 
     private void Awake()
     {
+        gameManager = FindAnyObjectByType<GameManager>();
+
         hpBar.maxValue = health;
 
         originalColor = meshRenderer.material.color;
@@ -25,6 +30,9 @@ public class Defender : MonoBehaviour
 
         if(health <=0)
         {
+            gameManager.xSpawnBias -= transform.position.x;
+            gameManager.zSpawnBias -= transform.position.z;
+
             Destroy(this.gameObject);
         }
     }

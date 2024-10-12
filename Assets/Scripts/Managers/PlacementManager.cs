@@ -58,6 +58,10 @@ public class PlacementManager : MonoBehaviour
                     if (!IsTooCloseToAnotherDefender(hit.point))
                     {
                         gameManager.removeMoney(selectedDefender.GetComponent<Defender>().getCost());
+
+                        gameManager.xSpawnBias += hit.point.x;
+                        gameManager.zSpawnBias += hit.point.z;
+
                         Instantiate(selectedDefender, hit.point, Quaternion.identity);
                     }
                     else
