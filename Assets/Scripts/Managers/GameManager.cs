@@ -11,10 +11,11 @@ public class GameManager : MonoBehaviour
 
     private float elapsedTime = 0f;
     [SerializeField] private float lastIncrementTime = 0f;
-    private float incrementTime = 20f;
-    public int incrementCount = 1;
+    private float incrementTime = 15f;
+    public int waveCount = 1;
+    [SerializeField] TMP_Text waveText;
 
-    private float spawnTime = 10f;
+    private float spawnTime = 20f;
     [SerializeField] private float lastSpawnTime = 0f;
 
 
@@ -28,6 +29,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TMP_Text scoreText;
     [SerializeField] private GameObject pausePanel;
 
+
+    private void Start()
+    {
+        StartCoroutine(SpawnCoroutine());
+    }
+
     private void Update()
     {
 
@@ -35,18 +42,13 @@ public class GameManager : MonoBehaviour
         elapsedTime += Time.deltaTime;
 
         timerText.text = elapsedTime.ToString("F1");
-
-        //increments difficulty
-        if (elapsedTime - lastIncrementTime >= incrementTime)
-        {
-            incrementCount++;
-
-            lastIncrementTime = elapsedTime;
-        }
+        waveText.text = "Wave: " + waveCount.ToString();
 
         //spawn intervals
         if (elapsedTime - lastSpawnTime >= spawnTime)
         {
+            waveCount++;
+
             StartCoroutine(SpawnCoroutine());
 
             lastSpawnTime = elapsedTime;
@@ -67,7 +69,8 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator SpawnCoroutine()
     {
-        int activateCount = incrementCount; //number of spawners to activate
+        int activateCount = Mathf.CeilToInt(waveCount * 0.5f);
+        activateCount = Mathf.Min(activateCount, spawnerObjects.Count);
 
         if (activateCount > spawnerObjects.Count)
         {
@@ -160,5 +163,10 @@ public class GameManager : MonoBehaviour
             Time.timeScale = 0;
 
         }
+    }
+
+    public int getWaveCount()
+    {
+        return waveCount;
     }
 }
