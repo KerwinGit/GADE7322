@@ -17,6 +17,7 @@ public class Spawner : MonoBehaviour
 
     private void OnEnable()
     {
+        #region legacy
         //spawnTotal = startTotal + gameManager.waveCount;
 
         //specialProbability = bigProbability + bomberProbability;
@@ -24,6 +25,7 @@ public class Spawner : MonoBehaviour
         //basicProbability = 1f - specialProbability;
 
         //Spawn(spawnTotal);
+        #endregion
 
         int Wave = gameManager.getWaveCount();
 

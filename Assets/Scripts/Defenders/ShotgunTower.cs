@@ -8,11 +8,6 @@ public class ShotgunTower : DefenderAttack
     [SerializeField] private float lineDuration = 0.1f; // Duration for line visibility
     [SerializeField] private GameObject explosionEffect;
 
-    [Header("Camera Shake")]
-    [SerializeField] private float shakeDuration = 0.5f;
-    [SerializeField] private float shakeMagnitude = 5f;
-    [SerializeField] private float dampingSpeed = 0.7f;
-
     protected override IEnumerator Attack(Enemy target)
     {
         isAttacking = true;
@@ -22,7 +17,7 @@ public class ShotgunTower : DefenderAttack
         {
             VisualizeAttack(target);
             Instantiate(explosionEffect, target.transform.position, Quaternion.identity);
-            //FindObjectOfType<CameraShake>().TriggerShake(shakeDuration, shakeMagnitude, dampingSpeed);
+
             // Get all enemies within the attack range
             List<Enemy> enemiesInRange = new List<Enemy>();
 

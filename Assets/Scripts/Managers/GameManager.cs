@@ -12,7 +12,6 @@ public class GameManager : MonoBehaviour
 
     private float elapsedTime = 0f;
     [SerializeField] private float lastIncrementTime = 0f;
-    private float incrementTime = 15f;
     public int waveCount = 1;
     [SerializeField] TMP_Text waveText;
 
@@ -42,7 +41,6 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-
         //time tracking
         elapsedTime += Time.deltaTime;
 
@@ -104,8 +102,6 @@ public class GameManager : MonoBehaviour
             GameObject obj = shuffled[i];
             obj.SetActive(false);
         }
-
-        //StopCoroutine(SpawnCoroutine());
     }
 
     public void addMoney(int money)
