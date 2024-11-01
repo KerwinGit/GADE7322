@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class DefenderAttack : MonoBehaviour
 {
@@ -9,6 +11,9 @@ public class DefenderAttack : MonoBehaviour
     [SerializeField] protected LineRenderer lineRenderer; // Reference to LineRenderer
     protected List<GameObject> targets; // Change to List<GameObject>
     protected bool isAttacking = false;
+    [SerializeField] public GameObject upgradeCanvas;
+    [SerializeField] private TMP_Text txtCurrentStats;
+    [SerializeField] private TMP_Text txtUpgradeStates;
 
     private void Awake()
     {
@@ -18,9 +23,33 @@ public class DefenderAttack : MonoBehaviour
         lineRenderer.enabled = false; // Start with line renderer disabled
         StartCoroutine(CleanUpNullTargets());
     }
+    private void Start()
+    {
+        if (!this.GetComponent<Defender>().isMain)
+        {
+            txtCurrentStats.text = this.GetComponent<Defender>().health + "HP->\n" + atkDamage + "DMG->\n" + atkDelay + "Delay->";
+            txtUpgradeStates.text = this.GetComponent<Defender>().baseHealth * 2 + "HP\n" + atkDamage * 2 + "DMG\n" + atkDelay / 2 + "Delay";
+        }
+
+    }
 
     private void Update()
     {
+
+        if (Input.GetKeyDown(KeyCode.Mouse0) && !IsPointerOverUI())
+        {
+            closeUpgrade();
+        }
+        if (Input.GetKeyDown(KeyCode.Mouse1))
+        {
+            closeUpgrade();
+        }
+        if (!this.GetComponent<Defender>().isMain)
+        {
+            txtCurrentStats.text = this.GetComponent<Defender>().health + "HP->\n" + atkDamage + "DMG->\n" + atkDelay + "Delay->";
+            txtUpgradeStates.text = this.GetComponent<Defender>().baseHealth * 2 + "HP\n" + atkDamage * 2 + "DMG\n" + atkDelay / 2 + "Delay";
+        }
+        
         if (targets.Count > 0)
         {
             if (!isAttacking && targets[0] != null) // Use index for List
@@ -51,7 +80,7 @@ public class DefenderAttack : MonoBehaviour
             target.TakeDamage(atkDamage);
 
             // Remove the enemy from the list if it's dead
-            
+
             if (target != null && target.GetHealth() <= 0)
             {
                 RemoveTarget(target.gameObject); // Remove the specific enemy
@@ -113,5 +142,30 @@ public class DefenderAttack : MonoBehaviour
             // Wait for a short duration before checking again
             yield return new WaitForSeconds(0.5f);
         }
+    }
+
+    public void Upgrade()
+    {
+        int ogHealth = this.GetComponent<Defender>().health;
+        this.GetComponent<Defender>().baseHealth = this.GetComponent<Defender>().baseHealth * 2;
+        this.GetComponent<Defender>().health = this.GetComponent<Defender>().baseHealth;
+        atkDelay = atkDelay * 0.5f;
+        atkDamage = atkDamage * 2;
+        txtCurrentStats.text = this.GetComponent<Defender>().health + "HP->\n" + atkDamage + "DMG->\n" + atkDelay * 2 + "Delay->";
+        txtUpgradeStates.text = this.GetComponent<Defender>().baseHealth + "HP\n" + atkDamage * 2 + "DMG\n" + atkDelay * 0.5 + "Delay";
+        upgradeCanvas.SetActive(false);
+    }
+    public void openUpgrade() 
+    {
+        upgradeCanvas.SetActive(true);
+    }
+
+    public void closeUpgrade() 
+    {
+        upgradeCanvas.SetActive(false);
+    }
+    private bool IsPointerOverUI()
+    {
+        return EventSystem.current.IsPointerOverGameObject(); // Detect if mouse is over UI
     }
 }
