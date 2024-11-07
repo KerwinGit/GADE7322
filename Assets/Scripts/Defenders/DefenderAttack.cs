@@ -6,18 +6,30 @@ using UnityEngine.EventSystems;
 
 public class DefenderAttack : MonoBehaviour
 {
+    protected GameManager gameManager;
     [SerializeField] protected float atkDelay = 1;
     [SerializeField] protected int atkDamage = 1;
     [SerializeField] protected LineRenderer lineRenderer; // Reference to LineRenderer
     protected List<GameObject> targets; // Change to List<GameObject>
     protected bool isAttacking = false;
+
+    [Header("Upgrade Stuff")]
+    [SerializeField] private TMP_Text btnText;
     [SerializeField] public GameObject upgradeCanvas;
     [SerializeField] private TMP_Text txtCurrentStats;
     [SerializeField] private TMP_Text txtUpgradeStates;
+    [SerializeField] private int upgradeCost = 30;
+
+    [Header("Increase Rates")]
+    [SerializeField] private float upgradeIncreaseRate = 2f;
+    [SerializeField] private int healthIncreaseRate = 2;
+    [SerializeField] private int damageIncreaseRate = 2;
+    [SerializeField] private float attackDelayDecreaseRate = 0.5f;
+
 
     private void Awake()
     {
-
+        gameManager = FindAnyObjectByType<GameManager>();
         targets = new List<GameObject>(); // Initialize as a List
         lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.enabled = false; // Start with line renderer disabled
@@ -28,7 +40,8 @@ public class DefenderAttack : MonoBehaviour
         if (!this.GetComponent<Defender>().isMain)
         {
             txtCurrentStats.text = this.GetComponent<Defender>().health + "HP->\n" + atkDamage + "DMG->\n" + atkDelay + "Delay->";
-            txtUpgradeStates.text = this.GetComponent<Defender>().baseHealth * 2 + "HP\n" + atkDamage * 2 + "DMG\n" + atkDelay / 2 + "Delay";
+            txtUpgradeStates.text = this.GetComponent<Defender>().baseHealth * healthIncreaseRate + "HP\n" + atkDamage * damageIncreaseRate + "DMG\n" + atkDelay * attackDelayDecreaseRate + "Delay";
+            btnText.text = "Upgrade\n" + upgradeCost;
         }
 
     }
@@ -47,9 +60,9 @@ public class DefenderAttack : MonoBehaviour
         if (!this.GetComponent<Defender>().isMain)
         {
             txtCurrentStats.text = this.GetComponent<Defender>().health + "HP->\n" + atkDamage + "DMG->\n" + atkDelay + "Delay->";
-            txtUpgradeStates.text = this.GetComponent<Defender>().baseHealth * 2 + "HP\n" + atkDamage * 2 + "DMG\n" + atkDelay / 2 + "Delay";
+            txtUpgradeStates.text = this.GetComponent<Defender>().baseHealth * healthIncreaseRate + "HP\n" + atkDamage * damageIncreaseRate + "DMG\n" + atkDelay * attackDelayDecreaseRate + "Delay";
         }
-        
+
         if (targets.Count > 0)
         {
             if (!isAttacking && targets[0] != null) // Use index for List
@@ -146,21 +159,34 @@ public class DefenderAttack : MonoBehaviour
 
     public void Upgrade()
     {
-        int ogHealth = this.GetComponent<Defender>().health;
-        this.GetComponent<Defender>().baseHealth = this.GetComponent<Defender>().baseHealth * 2;
-        this.GetComponent<Defender>().health = this.GetComponent<Defender>().baseHealth;
-        atkDelay = atkDelay * 0.5f;
-        atkDamage = atkDamage * 2;
-        txtCurrentStats.text = this.GetComponent<Defender>().health + "HP->\n" + atkDamage + "DMG->\n" + atkDelay * 2 + "Delay->";
-        txtUpgradeStates.text = this.GetComponent<Defender>().baseHealth + "HP\n" + atkDamage * 2 + "DMG\n" + atkDelay * 0.5 + "Delay";
-        upgradeCanvas.SetActive(false);
+        if (gameManager.getCurrentMoney() > upgradeCost)
+        {
+            gameManager.removeMoney(upgradeCost);
+
+            upgradeCost = Mathf.RoundToInt(upgradeCost * upgradeIncreaseRate);
+            btnText.text = "Upgrade\n" + upgradeCost;
+            int ogHealth = this.GetComponent<Defender>().health;
+            this.GetComponent<Defender>().baseHealth = this.GetComponent<Defender>().baseHealth * healthIncreaseRate;
+            this.GetComponent<Defender>().health = this.GetComponent<Defender>().baseHealth;
+            atkDelay = atkDelay * attackDelayDecreaseRate;
+            atkDamage = atkDamage * damageIncreaseRate;
+            txtCurrentStats.text = this.GetComponent<Defender>().health + "HP->\n" + atkDamage + "DMG->\n" + atkDelay * 2 + "Delay->";
+            txtUpgradeStates.text = this.GetComponent<Defender>().baseHealth * healthIncreaseRate + "HP\n" + atkDamage * damageIncreaseRate + "DMG\n" + atkDelay * attackDelayDecreaseRate + "Delay";
+            upgradeCanvas.SetActive(false);
+
+        }
+        else
+        {
+            Debug.Log("Not enough money");
+        }
+
     }
-    public void openUpgrade() 
+    public void openUpgrade()
     {
         upgradeCanvas.SetActive(true);
     }
 
-    public void closeUpgrade() 
+    public void closeUpgrade()
     {
         upgradeCanvas.SetActive(false);
     }

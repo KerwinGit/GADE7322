@@ -576,9 +576,12 @@ MonoBehaviour:
   atkDelay: 0.5
   atkDamage: 10
   lineRenderer: {fileID: 958810382628330689}
+  btnText: {fileID: 5593865402973204631}
   upgradeCanvas: {fileID: 8773021181439659553}
   txtCurrentStats: {fileID: 8173418686987040516}
   txtUpgradeStates: {fileID: 5142871842775449294}
+  upgradeCost: 30
+  upgradeIncreaseRate: 2
 --- !u!1 &2404302868716616164
 GameObject:
   m_ObjectHideFlags: 0
@@ -1145,7 +1148,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 15.4, y: 1.2773}
+  m_AnchoredPosition: {x: 16.8, y: 1.2773}
   m_SizeDelta: {x: 148.4279, y: 102.6392}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1293498310111829330

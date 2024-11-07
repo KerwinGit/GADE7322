@@ -677,9 +677,12 @@ MonoBehaviour:
   atkDelay: 1
   atkDamage: 10
   lineRenderer: {fileID: 958810382628330689}
+  btnText: {fileID: 5613575325257167137}
   upgradeCanvas: {fileID: 1454330260892364700}
   txtCurrentStats: {fileID: 875655167734794236}
   txtUpgradeStates: {fileID: 8566525157656227663}
+  upgradeCost: 30
+  upgradeIncreaseRate: 2
   maxTargets: 5
   lineDuration: 0.1
   explosionEffect: {fileID: 846810274425011311, guid: 62cd123be926e3443b6056799fa29699, type: 3}
@@ -1485,7 +1488,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9077983734798425323}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.04927}
+  m_LocalPosition: {x: 0, y: 0, z: -0.05}
   m_LocalScale: {x: 0.116380855, y: 0.116380855, z: 0.116380855}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1493,7 +1496,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 15.4, y: 1.2773}
+  m_AnchoredPosition: {x: 16.8, y: 1.1}
   m_SizeDelta: {x: 148.4279, y: 102.6392}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5193800709667672983
