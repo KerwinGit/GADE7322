@@ -19,6 +19,11 @@ public class DefenderAttack : MonoBehaviour
     [SerializeField] private TMP_Text txtCurrentStats;
     [SerializeField] private TMP_Text txtUpgradeStates;
     [SerializeField] private int upgradeCost = 30;
+    [SerializeField] private int level = 0;
+    [SerializeField] private GameObject levelBand;
+    [SerializeField] private Material level1Mat;
+    [SerializeField] private Material level2Mat;
+    [SerializeField] private Material level3Mat;
 
     [Header("Increase Rates")]
     [SerializeField] private float upgradeIncreaseRate = 2f;
@@ -49,6 +54,8 @@ public class DefenderAttack : MonoBehaviour
     private void Update()
     {
 
+
+
         if (Input.GetKeyDown(KeyCode.Mouse0) && !IsPointerOverUI())
         {
             closeUpgrade();
@@ -59,6 +66,29 @@ public class DefenderAttack : MonoBehaviour
         }
         if (!this.GetComponent<Defender>().isMain)
         {
+            if (level == 0)
+            {
+                levelBand.SetActive(false);
+
+            }
+            else if (level == 1)
+            {
+                levelBand.GetComponent<MeshRenderer>().material = level1Mat;
+                levelBand.SetActive(true);
+
+            }
+            else if (level == 2)
+            {
+                levelBand.SetActive(true);
+                levelBand.GetComponent<MeshRenderer>().material = level2Mat;
+
+            }
+            else if (level == 3)
+            {
+                levelBand.SetActive(true);
+                levelBand.GetComponent<MeshRenderer>().material = level3Mat;
+            }
+
             txtCurrentStats.text = this.GetComponent<Defender>().health + "HP->\n" + atkDamage + "DMG->\n" + atkDelay + "Delay->";
             txtUpgradeStates.text = this.GetComponent<Defender>().baseHealth * healthIncreaseRate + "HP\n" + atkDamage * damageIncreaseRate + "DMG\n" + atkDelay * attackDelayDecreaseRate + "Delay";
         }
@@ -161,18 +191,32 @@ public class DefenderAttack : MonoBehaviour
     {
         if (gameManager.getCurrentMoney() > upgradeCost)
         {
-            gameManager.removeMoney(upgradeCost);
+            if (level < 3)
+            {
+                gameManager.removeMoney(upgradeCost);
 
-            upgradeCost = Mathf.RoundToInt(upgradeCost * upgradeIncreaseRate);
-            btnText.text = "Upgrade\n" + upgradeCost;
-            int ogHealth = this.GetComponent<Defender>().health;
-            this.GetComponent<Defender>().baseHealth = this.GetComponent<Defender>().baseHealth * healthIncreaseRate;
-            this.GetComponent<Defender>().health = this.GetComponent<Defender>().baseHealth;
-            atkDelay = atkDelay * attackDelayDecreaseRate;
-            atkDamage = atkDamage * damageIncreaseRate;
-            txtCurrentStats.text = this.GetComponent<Defender>().health + "HP->\n" + atkDamage + "DMG->\n" + atkDelay * 2 + "Delay->";
-            txtUpgradeStates.text = this.GetComponent<Defender>().baseHealth * healthIncreaseRate + "HP\n" + atkDamage * damageIncreaseRate + "DMG\n" + atkDelay * attackDelayDecreaseRate + "Delay";
-            upgradeCanvas.SetActive(false);
+                upgradeCost = Mathf.RoundToInt(upgradeCost * upgradeIncreaseRate);
+                btnText.text = "Upgrade\n" + upgradeCost;
+                int ogHealth = this.GetComponent<Defender>().health;
+                this.GetComponent<Defender>().baseHealth = this.GetComponent<Defender>().baseHealth * healthIncreaseRate;
+                this.GetComponent<Defender>().health = this.GetComponent<Defender>().baseHealth;
+                atkDelay = atkDelay * attackDelayDecreaseRate;
+                atkDamage = atkDamage * damageIncreaseRate;
+                txtCurrentStats.text = this.GetComponent<Defender>().health + "HP->\n" + atkDamage + "DMG->\n" + atkDelay * 2 + "Delay->";
+                txtUpgradeStates.text = this.GetComponent<Defender>().baseHealth * healthIncreaseRate + "HP\n" + atkDamage * damageIncreaseRate + "DMG\n" + atkDelay * attackDelayDecreaseRate + "Delay";
+                upgradeCanvas.SetActive(false);
+
+                level++;
+                if (level == 3)
+                {
+                    btnText.text = "MAXED";
+                }
+            }
+            else
+            {
+                Debug.Log("Maxed out man");
+            }
+
 
         }
         else
