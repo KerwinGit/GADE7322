@@ -5,10 +5,10 @@ using UnityEngine.Events;
 public class Defender : MonoBehaviour
 {
     [SerializeField] protected GameManager gameManager;
-
+    [SerializeField] public int baseHealth = 100;
     [SerializeField] public int health = 100;
     [SerializeField] private int cost = 10;
-    [SerializeField] private bool isMain;
+    [SerializeField] public bool isMain;
 
     [SerializeField] private MeshRenderer meshRenderer;
     private Color originalColor;
@@ -72,8 +72,11 @@ public class Defender : MonoBehaviour
 
             yield return new WaitForSeconds(0.5f);
 
-        
+
 
     }
+
+   
+
 
 }

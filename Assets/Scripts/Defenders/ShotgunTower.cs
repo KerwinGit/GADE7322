@@ -8,6 +8,9 @@ public class ShotgunTower : DefenderAttack
     [SerializeField] private float lineDuration = 0.1f; // Duration for line visibility
     [SerializeField] private GameObject explosionEffect;
 
+    
+    
+
     protected override IEnumerator Attack(Enemy target)
     {
         isAttacking = true;

@@ -21,6 +21,8 @@ public class PlacementManager : MonoBehaviour
     [SerializeField] private TMP_Text txtError;
     [SerializeField] private UIManager uiManager;
 
+    //[SerializeField] private GameObject closeTower;
+
     private void Awake()
     {
         txtSelectedDefender.text = "Selected Defender\n" + selectedDefender.name;
@@ -42,6 +44,10 @@ public class PlacementManager : MonoBehaviour
                 Debug.Log("Pointer is over UI, not placing defender.");
             }
         }
+        else if (Input.GetKeyDown(KeyCode.Mouse1))
+        {
+
+        }
     }
 
     public void SpawnDefenderOnCursor()
@@ -52,11 +58,14 @@ public class PlacementManager : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, terrainLayer))
             {
+                
+
                 if (hit.point.y < 40 && hit.point.y > 0.4f)
                 {
                     // Check for nearby defenders
                     if (!IsTooCloseToAnotherDefender(hit.point))
                     {
+                        
                         gameManager.removeMoney(selectedDefender.GetComponent<Defender>().getCost());
 
                         gameManager.xSpawnBias += hit.point.x;
@@ -66,6 +75,8 @@ public class PlacementManager : MonoBehaviour
                     }
                     else
                     {
+
+                        
                         txtError.text = "Too close to another defender!";
                         Debug.Log("Too close to another defender.");
                         uiManager.FlashErrorMessage();
@@ -96,6 +107,7 @@ public class PlacementManager : MonoBehaviour
             // Check distance between the spawn point and each defender
             if (Vector3.Distance(spawnPoint, defender.transform.position) < placementRadius)
             {
+                
                 return true; // Defender is too close
             }
         }

@@ -1,26 +1,98 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class DefenderAttack : MonoBehaviour
 {
+    protected GameManager gameManager;
     [SerializeField] protected float atkDelay = 1;
     [SerializeField] protected int atkDamage = 1;
     [SerializeField] protected LineRenderer lineRenderer; // Reference to LineRenderer
     protected List<GameObject> targets; // Change to List<GameObject>
     protected bool isAttacking = false;
 
+    [Header("Upgrade Stuff")]
+    [SerializeField] private TMP_Text btnText;
+    [SerializeField] public GameObject upgradeCanvas;
+    [SerializeField] private TMP_Text txtCurrentStats;
+    [SerializeField] private TMP_Text txtUpgradeStates;
+    [SerializeField] private int upgradeCost = 30;
+    [SerializeField] private int level = 0;
+    [SerializeField] private GameObject levelBand;
+    [SerializeField] private Material level1Mat;
+    [SerializeField] private Material level2Mat;
+    [SerializeField] private Material level3Mat;
+
+    [Header("Increase Rates")]
+    [SerializeField] private float upgradeIncreaseRate = 2f;
+    [SerializeField] private int healthIncreaseRate = 2;
+    [SerializeField] private int damageIncreaseRate = 2;
+    [SerializeField] private float attackDelayDecreaseRate = 0.5f;
+
+
     private void Awake()
     {
-
+        gameManager = FindAnyObjectByType<GameManager>();
         targets = new List<GameObject>(); // Initialize as a List
         lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.enabled = false; // Start with line renderer disabled
         StartCoroutine(CleanUpNullTargets());
     }
+    private void Start()
+    {
+        if (!this.GetComponent<Defender>().isMain)
+        {
+            txtCurrentStats.text = this.GetComponent<Defender>().health + "HP->\n" + atkDamage + "DMG->\n" + atkDelay + "Delay->";
+            txtUpgradeStates.text = this.GetComponent<Defender>().baseHealth * healthIncreaseRate + "HP\n" + atkDamage * damageIncreaseRate + "DMG\n" + atkDelay * attackDelayDecreaseRate + "Delay";
+            btnText.text = "Upgrade\n" + upgradeCost;
+        }
+
+    }
 
     private void Update()
     {
+
+
+
+        if (Input.GetKeyDown(KeyCode.Mouse0) && !IsPointerOverUI())
+        {
+            closeUpgrade();
+        }
+        if (Input.GetKeyDown(KeyCode.Mouse1))
+        {
+            closeUpgrade();
+        }
+        if (!this.GetComponent<Defender>().isMain)
+        {
+            if (level == 0)
+            {
+                levelBand.SetActive(false);
+
+            }
+            else if (level == 1)
+            {
+                levelBand.GetComponent<MeshRenderer>().material = level1Mat;
+                levelBand.SetActive(true);
+
+            }
+            else if (level == 2)
+            {
+                levelBand.SetActive(true);
+                levelBand.GetComponent<MeshRenderer>().material = level2Mat;
+
+            }
+            else if (level == 3)
+            {
+                levelBand.SetActive(true);
+                levelBand.GetComponent<MeshRenderer>().material = level3Mat;
+            }
+
+            txtCurrentStats.text = this.GetComponent<Defender>().health + "HP->\n" + atkDamage + "DMG->\n" + atkDelay + "Delay->";
+            txtUpgradeStates.text = this.GetComponent<Defender>().baseHealth * healthIncreaseRate + "HP\n" + atkDamage * damageIncreaseRate + "DMG\n" + atkDelay * attackDelayDecreaseRate + "Delay";
+        }
+
         if (targets.Count > 0)
         {
             if (!isAttacking && targets[0] != null) // Use index for List
@@ -51,7 +123,7 @@ public class DefenderAttack : MonoBehaviour
             target.TakeDamage(atkDamage);
 
             // Remove the enemy from the list if it's dead
-            
+
             if (target != null && target.GetHealth() <= 0)
             {
                 RemoveTarget(target.gameObject); // Remove the specific enemy
@@ -113,5 +185,57 @@ public class DefenderAttack : MonoBehaviour
             // Wait for a short duration before checking again
             yield return new WaitForSeconds(0.5f);
         }
+    }
+
+    public void Upgrade()
+    {
+        if (gameManager.getCurrentMoney() > upgradeCost)
+        {
+            if (level < 3)
+            {
+                gameManager.removeMoney(upgradeCost);
+
+                upgradeCost = Mathf.RoundToInt(upgradeCost * upgradeIncreaseRate);
+                btnText.text = "Upgrade\n" + upgradeCost;
+                int ogHealth = this.GetComponent<Defender>().health;
+                this.GetComponent<Defender>().baseHealth = this.GetComponent<Defender>().baseHealth * healthIncreaseRate;
+                this.GetComponent<Defender>().health = this.GetComponent<Defender>().baseHealth;
+                atkDelay = atkDelay * attackDelayDecreaseRate;
+                atkDamage = atkDamage * damageIncreaseRate;
+                txtCurrentStats.text = this.GetComponent<Defender>().health + "HP->\n" + atkDamage + "DMG->\n" + atkDelay * 2 + "Delay->";
+                txtUpgradeStates.text = this.GetComponent<Defender>().baseHealth * healthIncreaseRate + "HP\n" + atkDamage * damageIncreaseRate + "DMG\n" + atkDelay * attackDelayDecreaseRate + "Delay";
+                upgradeCanvas.SetActive(false);
+
+                level++;
+                if (level == 3)
+                {
+                    btnText.text = "MAXED";
+                }
+            }
+            else
+            {
+                Debug.Log("Maxed out man");
+            }
+
+
+        }
+        else
+        {
+            Debug.Log("Not enough money");
+        }
+
+    }
+    public void openUpgrade()
+    {
+        upgradeCanvas.SetActive(true);
+    }
+
+    public void closeUpgrade()
+    {
+        upgradeCanvas.SetActive(false);
+    }
+    private bool IsPointerOverUI()
+    {
+        return EventSystem.current.IsPointerOverGameObject(); // Detect if mouse is over UI
     }
 }
