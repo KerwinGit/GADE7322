@@ -1,9 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
-using UnityEngine;
-using UnityEngine.UIElements;
 using Unity.AI.Navigation;
+using UnityEngine;
 
 public class DrawMap : MonoBehaviour
 {
@@ -36,6 +32,10 @@ public class DrawMap : MonoBehaviour
 
     [Header("Colour")]
     public Terrain[] regions;
+    [SerializeField] Gradient terrainGradient;
+    [SerializeField] Material material;
+    [SerializeField] Texture2D gradientTexture;
+
 
     [Header("Smoothing + Centre")]
     public float smoothStart;
@@ -84,7 +84,7 @@ public class DrawMap : MonoBehaviour
         }
 
         //random seed from system clock
-        seed =  System.DateTime.Now.Ticks.GetHashCode();
+        seed = System.DateTime.Now.Ticks.GetHashCode();
 
         Draw();
 
@@ -92,19 +92,31 @@ public class DrawMap : MonoBehaviour
         navMesh.GetComponent<NavMeshSurface>().BuildNavMesh();
     }
 
+    private void GradientToTexture()
+    {
+        gradientTexture = new Texture2D(1, 100);
+        Color[] pixelColours = new Color[100];
+        for (int i = 0; i < 100; i++)
+        {
+            pixelColours[i] = terrainGradient.Evaluate((float)i / 100);
+        }
+        gradientTexture.SetPixels(pixelColours);
+        gradientTexture.Apply();
+    }
+
     public void Draw()
     {
         float[,] map = MapNoise.CreateNoise(width, height, seed, scale, octaves, persistence, lacunarity, offset);
 
-        Color[] colours = new Color[width*height];
+        Color[] colours = new Color[width * height];
 
         for (int y = 0; y < height; y++)
         {
             for (int x = 0; x < width; x++)
             {
-                if(useFalloff)
+                if (useFalloff)
                 {
-                    map[x,y] = Mathf.Clamp01(map[x,y] - falloff[x,y]);
+                    map[x, y] = Mathf.Clamp01(map[x, y] - falloff[x, y]);
                 }
 
                 map[x, y] = Mathf.Clamp01(map[x, y] - paths[x, y]);
@@ -114,7 +126,7 @@ public class DrawMap : MonoBehaviour
                 {
                     if (currHeight <= regions[i].height)
                     {
-                        colours[y*width+x] = regions[i].colour;
+                        colours[y * width + x] = regions[i].colour;
                         break;
                     }
                 }
@@ -137,18 +149,35 @@ public class DrawMap : MonoBehaviour
         {
             display.DrawMesh(MeshGen.GenTerrain(map, heightMulti, heightCurve), TextureGen.ColourTexture(colours, width, height));
         }
-        else if(drawMode == DrawMode.Falloff)
+        else if (drawMode == DrawMode.Falloff)
         {
             display.DrawTexture(TextureGen.NoiseTexture(CentreValley.Generate(mapSize, smoothStart, smoothEnd)));
         }
-        else if(drawMode == DrawMode.Paths)
+        else if (drawMode == DrawMode.Paths)
         {
             display.DrawTexture(TextureGen.NoiseTexture(PathGen.Generate(mapSize, lineRenderers, pathSmoothStart, pathSmoothEnd)));
         }
-    }    
+       
+    }
+
+    private void Start()
+    {
+         GradientToTexture();
+        float minHeight = meshGO.GetComponent<MeshFilter>().mesh.bounds.min.y + transform.position.y;
+        float maxHeight = meshGO.GetComponent<MeshFilter>().mesh.bounds.max.y + transform.position.y;
+        
+    }
+    private void Update()
+    {
+        GradientToTexture();
+        float minHeight = meshGO.GetComponent<MeshFilter>().mesh.bounds.min.y + transform.position.y;
+        float maxHeight = meshGO.GetComponent<MeshFilter>().mesh.bounds.max.y + transform.position.y;
+        material.SetTexture("terrainGradient", gradientTexture);
+    }
 
     private void OnValidate() // same as awake, just so that we can test generating in scene view
     {
+
         mapSize = new Vector2Int(width, height);
 
         falloff = CentreValley.Generate(mapSize, smoothStart, smoothEnd);
@@ -172,7 +201,7 @@ public class DrawMap : MonoBehaviour
         {
             octaves = 0;
         }
-
+        
 
         Draw();
     }
