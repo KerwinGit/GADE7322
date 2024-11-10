@@ -13,7 +13,7 @@ public class ProceduralBoss : Enemy
 {
     private string name = "";
 
-    private float maxStatBudget = 1000f;
+    private float maxStatBudget = 500f;
     private float healthRatio, damageRatio, speedRatio;
 
     [SerializeField] private LineRenderer lineRenderer; // Reference to LineRenderer
@@ -155,8 +155,8 @@ public class ProceduralBoss : Enemy
         switch(type)
         {
             case bossType.attacker:
-                health *= 2;
-                atkDamage /= 2;
+                health /= 2;
+                atkDamage *= 2;
                 name2 = damageArchetypes[random.Next(0, damageArchetypes.Length)];
                 horn1.material.color = Color.red;
                 horn2.material.color = Color.red;
