@@ -1,19 +1,26 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Rendering;
+using UnityEngine.UI;
 using static UnityEngine.GraphicsBuffer;
 
 public class ProceduralBoss : Enemy
 {
+    private string name = "";
+
     private float maxStatBudget = 1000f;
     private float healthRatio, damageRatio, speedRatio;
 
     [SerializeField] private LineRenderer lineRenderer; // Reference to LineRenderer
     private bool isAttacking = false;
+    private float buffRadius = 100;
+
+    private Slider bossBar;
 
     private enum bossType
     {
@@ -23,13 +30,113 @@ public class ProceduralBoss : Enemy
         support
     }
 
-    private bossType type;
+    [SerializeField] private bossType type;
 
+    string[] enemyNames = new string[]
+{
+    "Gloomfang",
+    "Dreadmaw",
+    "Ironhide",
+    "Boneclaw",
+    "Grimshade",
+    "Nightstalker",
+    "Frostbite",
+    "Bloodspike",
+    "Rageclaw",
+    "Venomtail",
+    "Shadowfiend",
+    "Blazefury",
+    "Skullcrusher",
+    "Terrorfang",
+    "Ghoulshade",
+    "Stormreaver",
+    "Hellfire",
+    "Rotting Maw",
+    "Darkwhisper",
+    "Flamepike",
+    "Thunderclap",
+    "Ashenblade",
+    "Voidcaller",
+    "Spinebreaker",
+    "Soulrender",
+    "Steeljaw",
+    "Stonefist",
+    "Icevein",
+    "Emberheart",
+    "Voidspawn",
+    "Cinderclaw",
+    "Thornspike",
+    "Deathbringer",
+    "Holloweye",
+    "Scorchmaw",
+    "Rottingfang",
+    "Plagueshade",
+    "Blightmire",
+    "Wrathscale",
+    "Gorehound"
+};
+
+    string[] damageArchetypes = {
+    "Assassin",
+    "Berserker",
+    "Ravager",
+    "Vindicator",
+    "Blade",
+    "Reaper",
+    "Destroyer",
+    "Warbringer",
+    "Striker",
+    "Marauder"
+};
+    string[] tankArchetypes = {
+    "Ironclad",
+    "Bulwark",
+    "Fortress",
+    "Aegis",
+    "Juggernaut",
+    "Colossus",
+    "Goliath",
+    "Shieldbearer",
+    "Titan",
+    "Guardian"
+};
+    string[] supportArchetypes = {
+    "Caretaker",
+    "Mystic",
+    "Oracle",
+    "Protector",
+    "Sentinel",
+    "Guardian",
+    "Sage",
+    "Lifebinder",
+    "Harbinger",
+    "Luminary"
+};
+    string[] balancedArchetypes = {
+    "Vanguard",
+    "Warden",
+    "Arbiter",
+    "Sentinel",
+    "Enforcer",
+    "Champion",
+    "Phalanx",
+    "Guardian",
+    "Marshal",
+    "Legionnaire"
+};
+
+    [SerializeField] Renderer horn1;
+    [SerializeField] Renderer horn2;
+    [SerializeField] Renderer band;
 
     private void Awake()
     {
+        gameManager = FindAnyObjectByType<GameManager>();
+
         System.Random random = new System.Random(DateTime.Now.Millisecond);
         type = (bossType)random.Next(0, Enum.GetValues(typeof(bossType)).Length);
+
+        agent = GetComponent<NavMeshAgent>();
 
         // Generate balanced ratios for health, damage, and speed
         GenerateBalancedStats();
@@ -38,27 +145,55 @@ public class ProceduralBoss : Enemy
         health = maxStatBudget * healthRatio;
         atkDamage = Mathf.RoundToInt(maxStatBudget * damageRatio);
         agent.speed = maxStatBudget * speedRatio;
+        atkDelay = 3;
+        agent.stoppingDistance = 75;
         goldAmt = 100;
-        hpBar.maxValue = health;
+
+        string name1 = enemyNames[random.Next(0, enemyNames.Length)];
+        string name2 = "";
 
         switch(type)
         {
             case bossType.attacker:
-                atkDamage *= 2;
+                health *= 2;
+                atkDamage /= 2;
+                name2 = damageArchetypes[random.Next(0, damageArchetypes.Length)];
+                horn1.material.color = Color.red;
+                horn2.material.color = Color.red;
+                band.material.color = Color.red;
                 break;
             case bossType.tank:
                 health *= 2;
+                atkDamage /= 2;
+                name2 = tankArchetypes[random.Next(0, tankArchetypes.Length)];
+                horn1.material.color = Color.blue;
+                horn2.material.color = Color.blue;
+                band.material.color = Color.blue;
                 break;
             case bossType.support:
-                atkDelay /= 2;
+                atkDelay *= 2;
                 atkDamage /= 2;
+                name2 = supportArchetypes[random.Next(0, supportArchetypes.Length)];
+                horn1.material.color = Color.green;
+                horn2.material.color = Color.green;
+                band.material.color = Color.green;
                 break;
             case bossType.balanced:
-                ;
+                name2 = balancedArchetypes[random.Next(0, balancedArchetypes.Length)];
+                horn1.material.color = Color.black;
+                horn2.material.color = Color.black;
+                band.material.color = Color.black;
                 break;
         }
 
-        // Other setup
+
+        bossBar = gameManager.bossBar;
+        bossBar.maxValue = health;
+        hpBar.maxValue = health;
+
+        name = $"{name1} the {name2}";
+        gameManager.bossText.text = name;
+
         target = gameManager.mainTower.GetComponent<Defender>();
         agent = GetComponent<NavMeshAgent>();
     }
@@ -77,10 +212,12 @@ public class ProceduralBoss : Enemy
     private void Update()
     {
         hpBar.value = health;
+        bossBar.value = health;
 
         if (health <= 0)
         {
             giveMoney();
+            gameManager.bossCounter--;
             Destroy(gameObject);
         }
 
@@ -100,12 +237,16 @@ public class ProceduralBoss : Enemy
         {
             agent.destination = target.transform.position;
         }
-
     }
 
     #region laser attack
     IEnumerator Attack(Defender target)
     {
+        if(type == bossType.support)
+        {
+            ApplyBuff();
+        }
+
         isAttacking = true;
         yield return new WaitForSeconds(atkDelay);
 
@@ -147,8 +288,25 @@ public class ProceduralBoss : Enemy
     }
     #endregion
 
-    IEnumerator Buff()
+    private void ApplyBuff()
     {
-        yield return null;
+        List<GameObject> enemiesInRange = new List<GameObject>();
+
+        // Get all colliders within the specified radius
+        Collider[] colliders = Physics.OverlapSphere(transform.position, buffRadius);
+
+        // Loop through each collider and add the ones tagged as "Enemy" to the list
+        foreach (Collider collider in colliders)
+        {
+            if (collider.CompareTag("Enemy") && collider.gameObject != this.gameObject)
+            {
+                enemiesInRange.Add(collider.gameObject);
+            }
+        }
+
+        foreach(GameObject enemy in enemiesInRange)
+        {
+            enemy.GetComponent<Enemy>().GetBuff();
+        }
     }
 }

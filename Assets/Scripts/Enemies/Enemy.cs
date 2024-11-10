@@ -35,5 +35,21 @@ public abstract class Enemy : MonoBehaviour //parent class
     {
         gameManager.addMoney(goldAmt);
     }
-    
+
+
+    public void GetBuff()
+    {
+        StartCoroutine(BuffCoroutine());
+    }
+
+    IEnumerator BuffCoroutine()
+    {
+        float originalDelay = atkDelay;
+
+        atkDelay = atkDelay/2;
+
+        yield return new WaitForSeconds(3);
+
+        atkDelay = originalDelay;
+    }
 }

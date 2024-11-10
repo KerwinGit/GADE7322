@@ -48,7 +48,7 @@ GameObject:
   - component: {fileID: 3031556500683958951}
   - component: {fileID: 3661220892072616058}
   - component: {fileID: 7247687864224347537}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: btnUpgrade
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -180,7 +180,7 @@ GameObject:
   - component: {fileID: 5631925523521021241}
   - component: {fileID: 1568368711062845976}
   - component: {fileID: 8173418686987040516}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: txtCurrentStats
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -677,7 +677,7 @@ GameObject:
   - component: {fileID: 7521414673084719787}
   - component: {fileID: 6739416326631408325}
   - component: {fileID: 5593865402973204631}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1241,7 +1241,7 @@ GameObject:
   - component: {fileID: 9012894626224575488}
   - component: {fileID: 1293498310111829330}
   - component: {fileID: 5142871842775449294}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: txtUpgradeStats
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1558,7 +1558,7 @@ GameObject:
   - component: {fileID: 5201034990662844430}
   - component: {fileID: 8687582030406178946}
   - component: {fileID: 5307720045164781577}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1637,7 +1637,7 @@ GameObject:
   - component: {fileID: 1981070720314878298}
   - component: {fileID: 5821484074628988044}
   - component: {fileID: 8585011907811307551}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: upgradeCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}

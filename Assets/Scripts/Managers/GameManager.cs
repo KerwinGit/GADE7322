@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-
     public GameObject mainTower;
     [SerializeField] private int currentMoney;
 
@@ -18,8 +18,8 @@ public class GameManager : MonoBehaviour
     private float spawnTime = 20f;
     [SerializeField] private float lastSpawnTime = 0f;
 
-
     [SerializeField] private List<GameObject> spawnerObjects;
+    [SerializeField] GameObject boss;
 
     [SerializeField] TMP_Text timerText;
 
@@ -29,10 +29,14 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TMP_Text scoreText;
     [SerializeField] private GameObject pausePanel;
 
+    public Slider bossBar;
+    public TMP_Text bossText;
+
     [Header("Spawn Bias")]
     public float xSpawnBias = 0;
     public float zSpawnBias = 0;
 
+    public int bossCounter = 0;
 
     private void Start()
     {
@@ -41,6 +45,12 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        //boss counter
+        if(bossCounter == 0)
+        {
+            bossBar.gameObject.SetActive(false);
+        }
+
         //time tracking
         elapsedTime += Time.deltaTime;
 
@@ -51,6 +61,7 @@ public class GameManager : MonoBehaviour
         if (elapsedTime - lastSpawnTime >= spawnTime)
         {
             waveCount++;
+            Debug.Log(waveCount.ToString());
 
             StartCoroutine(SpawnCoroutine());
 
@@ -80,8 +91,16 @@ public class GameManager : MonoBehaviour
             activateCount = spawnerObjects.Count;
         }
 
-        //Debug.Log(activateCount);
+        int bossSpawnCount;
 
+        if (waveCount%5 == 0)
+        {
+            bossSpawnCount = waveCount / 5;
+        }
+        else
+        {
+            bossSpawnCount = 0;
+        }
 
         //shuffles spawners and activates them randomly
         List<GameObject> shuffled = spawnerObjects;
@@ -89,10 +108,15 @@ public class GameManager : MonoBehaviour
         SortSpawnByPos(shuffled);
 
         for (int i = 0; i < activateCount; i++)
-        {
+        {   
             //Debug.Log("active " + i + "]");
             GameObject obj = shuffled[i];
             obj.SetActive(true);
+            if (i < bossSpawnCount && bossSpawnCount != 0)
+            {
+                Debug.Log("boss spawned");
+                Instantiate(boss, obj.transform.position, Quaternion.identity);
+            }
         }
 
         yield return new WaitForSeconds(5f);

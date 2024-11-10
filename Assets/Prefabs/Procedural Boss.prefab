@@ -461,10 +461,13 @@ MonoBehaviour:
   atkDamage: 0
   health: 0
   goldAmt: 0
-  hpBar: {fileID: 0}
+  hpBar: {fileID: 742135275694365152}
   mainTower: {fileID: 0}
   target: {fileID: 0}
-  lineRenderer: {fileID: 0}
+  lineRenderer: {fileID: 3305608465803071542}
+  horn1: {fileID: 9043072100394850359}
+  horn2: {fileID: 2896808569565743056}
+  band: {fileID: 8840222313103186134}
 --- !u!1 &2409044950736838136
 GameObject:
   m_ObjectHideFlags: 0
