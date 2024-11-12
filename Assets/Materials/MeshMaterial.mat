@@ -26,8 +26,8 @@ Material:
     m_Ints: []
     m_Floats:
     - _QueueControl: 0
-    - _amplitude: 1.59
-    - _speed: 0.39
+    - _amplitude: 2.4
+    - _speed: 1
     m_Colors: []
   m_BuildTextureStacks: []
 --- !u!114 &6113103510211602694
