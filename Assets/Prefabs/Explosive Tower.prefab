@@ -143,7 +143,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6948241682666184464}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Fill Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -813,7 +813,7 @@ GameObject:
   - component: {fileID: 4605823663593701212}
   - component: {fileID: 495374727284066831}
   - component: {fileID: 1381087888774140449}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -965,7 +965,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1360330852679647454}
   - component: {fileID: 6942541385387693236}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Slider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1157,7 +1157,7 @@ GameObject:
   - component: {fileID: 3257843770497679894}
   - component: {fileID: 3149000059192217116}
   - component: {fileID: 6214595391613812975}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1233,7 +1233,7 @@ GameObject:
   - component: {fileID: 4465915790998960607}
   - component: {fileID: 441720321775046538}
   - component: {fileID: 6316268179454645122}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: hpBarCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
