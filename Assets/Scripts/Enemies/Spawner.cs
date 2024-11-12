@@ -15,6 +15,8 @@ public class Spawner : MonoBehaviour
     [SerializeField] private float bomberProbability;
     private float specialProbability;
 
+    [SerializeField] GameObject boss;
+
     private void OnEnable()
     {
         #region legacy
@@ -30,6 +32,8 @@ public class Spawner : MonoBehaviour
         int Wave = gameManager.getWaveCount();
 
         SpawnEnemies(Wave);
+
+        //Instantiate(boss, transform.position, Quaternion.identity);
     }
 
     private void Spawn(int enemies)

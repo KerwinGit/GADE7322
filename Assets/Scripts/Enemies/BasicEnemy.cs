@@ -38,6 +38,7 @@ public class BasicEnemy : Enemy
         if (health <= 0)
         {
             giveMoney();
+
             Destroy(this.gameObject);
         }
 
@@ -115,4 +116,6 @@ public class BasicEnemy : Enemy
         yield return new WaitForSeconds(delay);
         lineRenderer.enabled = false;
     }
+
+    
 }

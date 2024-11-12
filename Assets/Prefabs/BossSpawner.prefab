@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3076507051337678331}
-  - component: {fileID: 6116337905370440215}
+  - component: {fileID: -4569344077737466832}
   m_Layer: 0
-  m_Name: Spawner
+  m_Name: BossSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,7 +32,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6116337905370440215
+--- !u!114 &-4569344077737466832
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,15 +41,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2432030250936673910}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72fff7159b4b99941bb512d0ec60b295, type: 3}
+  m_Script: {fileID: 11500000, guid: a3eeaca4177f8b74a82ba2a6164c7e18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefabs:
-  - {fileID: 9101460546748860923, guid: 053941b20abec754192732dae293e69b, type: 3}
-  - {fileID: 1190057881521107237, guid: e03eb90a8b06e3c46a3c69994a39027c, type: 3}
-  - {fileID: 6734442395770600271, guid: 519c8e37629a3b74398e4f06fb849236, type: 3}
-  gameManager: {fileID: 0}
-  startTotal: 4
-  bigProbability: 0.2
-  bomberProbability: 0.05
   boss: {fileID: 1190057881521107237, guid: 9591c9a1f95c7194d9107364d56393b5, type: 3}
