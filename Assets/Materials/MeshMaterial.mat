@@ -24,7 +24,10 @@ Material:
     serializedVersion: 3
     m_TexEnvs: []
     m_Ints: []
-    m_Floats: []
+    m_Floats:
+    - _QueueControl: 0
+    - _amplitude: 0.9
+    - _speed: 0.52
     m_Colors: []
   m_BuildTextureStacks: []
 --- !u!114 &6113103510211602694
