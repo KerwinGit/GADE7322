@@ -56,7 +56,7 @@ public class DefenderAttack : MonoBehaviour
 
 
 
-        if (Input.GetKeyDown(KeyCode.Mouse0) /*&& !IsPointerOverUI()*/)
+        if (Input.GetKeyDown(KeyCode.Mouse0) && !IsPointerOverUI())
         {
             closeUpgrade();
             
