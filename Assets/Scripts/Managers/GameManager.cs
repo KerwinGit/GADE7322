@@ -116,6 +116,8 @@ public class GameManager : MonoBehaviour
             {
                 Debug.Log("boss spawned");
                 Instantiate(boss, obj.transform.position, Quaternion.identity);
+                bossCounter++;
+                bossBar.gameObject.SetActive(true);
             }
         }
 
